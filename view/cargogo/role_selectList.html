@@ -1,0 +1,101 @@
+{% extends "../cargogo/base_list.html" %}
+ {% block customTitle %}角色管理{% endblock %}
+  {% block customTitle_h5 %}
+<div class="ibox-title">
+    <h5>角色管理</h5>
+</div>
+{% endblock%} {% block content_top %}
+<div class="flex-box-enter">
+    <div>
+        <div class="top-search-box">
+            <div class="input-group-addon" style="width: 100px;line-height: inherit;">角色名称:</div>
+            <input type="text" name="roleRank" class="form-control" value="{{querymodel.roleRank}}">
+            <div class="btn-box btn-primary" onclick="submitSearch()">
+                <i class="glyphicon glyphicon-search" style="padding-right: 5px;"></i>查询</div>
+        </div>
+    </div>
+</div>
+<div class="flex-box-enter">
+	<div>&nbsp;</div>
+    <div class="flex-box">
+        {% if Btn['system/role/insert'] %}
+        <a class="btn btn-primary" href="/cargogo/role/toAdd">
+            <i class="fa fa-plus" style="padding-right: 5px;"></i>新增</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
+{% block search_bt %} 
+{% endblock %} 
+{% block table_th %}
+<th>序号</th>
+<th>角色名称</th>
+<th>角色标识</th>
+<th>添加时间</th>
+<th>角色状态</th>
+<th>操作</th>
+{% endblock %} 
+{% block table_body %} 
+{% for item in pageInfo %}
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" name="ids" value="{{item.id}}" />
+    </td>
+	<td>{{loop.index}}</td>
+    <td>{{item.roleRank}}</td>
+    <td>{{item.roleName}}</td>
+    <td>{{item.roleTime}}</td>
+
+    {% if item.roleStatus == "0" %}
+    <td>启用</td>
+    {% endif %} 
+    {% if item.roleStatus != "0" %}
+    <td>停用</td>
+    {% endif %}
+    <td>
+        <a href="toEdit?id={{item.id}}" class="btn btn-primary btn-xs">
+            <i class="fa fa-pencil" style="padding-right: 5px;"></i>编辑</a>
+    </td>
+</tr>
+{% endfor %} {% endblock %} 
+{% block page_body %}
+
+{% endblock %} 
+{% block customCode %}
+<script>
+    //删除菜单
+    function deleteRole() {
+        if (!confirm("确定删除选择的菜单项?")) {
+            return false;
+        }
+
+        $.ajax({
+            url: "delete",
+            type: "post",
+            data: { id: $('#deleteRole').data('id') },
+            dataType: "text",
+            success: function (data) {
+                console.log(data);
+                data = JSON.parse(data);
+                if (data == 1) {
+                    loadMenusTree();
+                } else {
+                    alert("删除角色失败！");
+                }
+            },
+            error: function () {
+                alert("删除角色失败！");
+            }
+        });
+    }
+    function submitSearch(){
+    	$("#pageNum").val("1");
+    	document.forms[0].submit();
+    }
+
+    $(function () {
+
+    });
+
+
+</script> {% endblock %}

@@ -1,0 +1,144 @@
+{% extends "../cargogo/base_list.html" %} {% block customTitle %}用户信息{% endblock %} {% block customTitle_h5 %}用户信息{% endblock%} {% block search_option %}
+<div class="input-group" style="margin-bottom: 10px">
+	<span class="input-group-addon">车辆品牌:</span>
+	<input type="text" name="brandNmae" class="form-control" value="{{queryModel.brandNmae}}" placeholder="请输入品牌型号">
+</div>
+{% endblock %} {% block search_bt %}
+<a onclick="submitSearch()" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>搜索</a>
+<a onclick="Reload()" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>刷新</a>
+{% endblock %} {% block table_th %}
+<th>编号</th>
+<th>品牌</th>
+<th>图标</th>
+<th>首页展示</th>
+<th>操作</th>
+{% endblock %} {% block table_body %} {% for item in pageInfo.records %}
+<tr class="gradeX">
+	<td>
+		<input type="checkbox" name="ids" value="{{item.id}}" />
+	</td>
+	<td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+	<td>{{item.brandNmae}}</td>
+	<td class="img"><img src="{{item.iconPath}}" /></td>
+	<td>
+		{% if item.isPage=='0' %}
+		<input class="switch-change switch-anim" value="{{item.id}}" onchange="checkNum($(this))" type="checkbox" checked> {% else %}
+		<input class="switch-change switch-anim" value="{{item.id}}" onchange="checkNum($(this))" type="checkbox"> {% endif %}
+	</td>
+	<td>
+		{% if Btn['cargogo/carbrand/deletecarbrand'] %}
+		<a href="javascript:;" class="btn btn-danger btn-xs" onclick="Deletebrand($(this),'{{item.id}}')">删除</a>
+		{% endif %}
+	</td>
+</tr>
+{% endfor %}
+<script>
+	function Opencardictionarie() {
+		layer.open({
+			type: 2,
+			title: '添加销售车辆',
+			shadeClose: true,
+			shade: 0.5,
+			area: ['70%', '90%'],
+			content: '/cargogo/caristration/sellcar' //iframe的url
+		})
+	}
+	function submitSearch() {
+		$("#pageNum").val("1");
+		document.forms[0].submit();
+	}
+	function Reload() {
+		window.location.reload()
+	}
+
+	function Openselectone() {
+		layer.open({
+			type: 2,
+			title: '车辆明细',
+			shadeClose: true,
+			shade: 0.5,
+			area: ['70%', '90%'],
+			content: '/cargogo/caristration/selectone?id=1' //iframe的url
+		})
+	}
+
+	function Editcar() {
+		layer.open({
+			type: 2,
+			title: '编辑车辆',
+			shadeClose: true,
+			shade: 0.5,
+			area: ['70%', '90%'],
+			content: '/cargogo/caristration/editcar?id=1' //iframe的url
+		})
+	}
+
+	function checkNum(obj) {
+		var changedata = {
+			id: obj.val(),
+			isPage: 1
+		}
+		if(obj.prop('checked')) {
+			console.log("选中");
+			changedata.isPage = 0;
+		} else {
+			console.log("没选中");
+			changedata.isPage = 1;
+		}
+		console.log(changedata);
+		$.ajax({
+			type: "post",
+			url: "/cargogo/carbrand/editbrand",
+			async: true,
+			data: changedata,
+			success: function(res) {
+				console.log(res)
+				var isfirefox=false;
+				if(res.status == 0) {
+					layer.msg(res.body.msg);
+				} else {
+					layer.msg(res.msg);
+					if (navigator.userAgent.indexOf('Firefox') >= 0) {
+						isfirefox=true;
+					} 
+				}
+				setTimeout(function(){
+					window.location.reload();
+					if(isfirefox){
+						obj.removeAttr("checked");
+					}
+				},1000)
+			},
+			complete: function(res) {
+				//console.log(res);
+				//layer.msg(res.data.msg);
+			}
+		});
+	}
+
+	function Deletebrand(obj, id) {
+		layer.confirm('您确定要删除该品牌？', {
+			btn: ['确定', '取消'] //按钮
+		}, function() {
+			$.ajax({
+				type: "get",
+				url: "/cargogo/carbrand/deletecarbrand?id=" + id,
+				async: true,
+				success: function(res) {
+					if(res.status==0) {
+						layer.msg(res.body.msg);
+					} else {
+						layer.msg(res.msg);
+					}
+				setTimeout(function() {
+						window.location.reload()
+					}, 1000)
+				}
+			});
+		})
+		
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "../cargogo/base_addOrUpdata.html" %} {% block form_top %} {% endblock %} {% block form %}
+<input type="hidden" name="status" class="form-control" value="{{e.status}}">
+<div class="form-group">
+    <label class="col-sm-3 control-label">名称：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.title}}" name="title" class="form-control" data-rule="名称:required:title;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">图片类型：</label>
+    <div class="col-sm-7">
+    <select  name="type" >
+        <option value="">请选择图片类型</option>
+        <option value="0" {% if e.type==0 %} selected="true" {% endif %}>首页轮播</option>
+        <option value="1" {% if e.type==1 %} selected="true" {% endif %}>首页弹窗</option>
+    </select>
+</div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">上传图片：</label>
+    <div class="col-sm-7">
+        <input type="hidden" value="" name="imgPath" id="img">
+        <input type="file" class="form-control" id="productImg" name="imgFile">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label"></label>
+    <div class="col-sm-7">
+        {% if e.imgPath != null %}
+        <img src="{{e.imgPath}}" width="200" height="200" id="picImg">
+        {% else %}
+        <img src="" width="150" height="150" id="picImg">
+        {% endif %}
+        <a class="btn btn-primary btn-sm" onclick="checkImg('picImg','productImg','img')">上传图片</a>
+    </div>
+</div>
+
+
+
+
+{% endblock %} {% block form_custom %}
+<script src="/static/js/ajaxfileupload.js"></script>
+<script>
+    $(function () {
+        var id = document.getElementById("eid");
+        var eid = id.value;
+        if (eid != null && eid != undefined && eid != '') {
+            $('#form1').attr('action', 'update');
+            $('#pagedes').html("编辑");
+            document.title = '编辑';
+        }
+    });
+
+    function checkImg(img, imgFile, imgUrl) {
+        var ths = $('#' + imgFile);
+        if (ths.val().length <= 0) {
+            alert("请上传图片");
+            return false;
+        } else if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(ths.val())) {
+            alert("图片类型必须是.gif,jpeg,jpg,png中的一种");
+            ths.val("");
+            return false;
+        }
+        //效验成功调用异步上传函数
+        ajaxFileUpload(img, imgFile, imgUrl);
+        return true;
+    }
+
+    function ajaxFileUpload(img, imgFile, imgUrl) {
+        console.log('ajaxFileUpload')
+        $.ajaxFileUpload
+            (
+            {
+                url: 'uploadImg', //用于文件上传的服务器端请求地址
+                type: 'post',
+                data: { 'a': 1 },
+                secureuri: false, //是否需要安全协议，一般设置为false
+                fileElementId: imgFile, //文件上传域的ID
+                dataType: 'text', //返回值类型 一般设置为json
+                success: function (data, status)  //服务器成功响应处理函数
+                {
+                    data = $.parseJSON(data.replace(/<.*?>/ig, ""));
+                    var error = data.error;
+                    if (error == 0) {
+                        console.log(data);
+                        $("#" + imgUrl).val("/" + data.img);
+                        $('#' + img).attr("src", data.url);
+                        $('#' + img).show();
+                    } else {
+                        alert("图片上传失败");
+                    }
+                },
+                error: function (data, status, e)//服务器响应失败处理函数
+                {
+                    alert(e);
+                }
+            }
+            )
+        return false;
+    }
+
+</script>{% endblock %}

@@ -1,0 +1,235 @@
+{% extends "../cargogo/base_toAdd.html" %}
+{% block customHead %} {% endblock %} 
+{% block customTitle_src %}
+<div class="ibox-title">
+	<h5>角色管理</h5>
+</div>
+{% endblock %} 
+{% block form %}
+<input id="insertOrUpdate" type="hidden" value="{{'2' if e.id else '1'}}" />
+<input id="roleStatus" type="hidden" value="{{e.roleStatus if e.roleStatus else '0'}}" />
+<div class="form-group">
+    <label class="col-sm-3 control-label">角色名称：</label>
+    <div class="col-sm-7">
+        <input type="text" id="roleName" name="roleName" placeholder="必须以ROLE_开头" data-th-maxlength="20" class="form-control" data-rule="角色标识:required:roleName;"
+            value="{{e.roleName}}">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">角色标识：</label>
+    <div class="col-sm-7">
+        <input type="text" id="roleRank" name="roleRank" data-th-maxlength="20" class="form-control" data-rule="角色名称:required:roleRank;"
+            value="{{e.roleRank}}">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">角色权限:&nbsp;&nbsp;</label>
+    <div class="col-sm-7">
+        [
+        <a id="expandOrCollapseAllBtn" href="#" title="展开/折叠全部资源" onclick="return false;">展开/折叠</a>] [
+        <a id="checkAllTrueOrFalse" href="#" title="全选/全不选" onclick="return false;">全选/全不选</a>]
+        <ul id="treeDemo2" class="ztree"></ul>
+    </div>
+</div>
+{% endblock %} {% block form_submit %}
+<div class="form-group">
+    <div style="margin-left:50%">
+        <a class="btn btn-primary btn-sm" id="saveRoleBtn">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>保存</a>
+    </div>
+</div>
+
+{% block form_scr %}
+{% endblock %}
+{% endblock %} {% block form_custom %}
+<link href="/static/js/zTree3.5/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+<script src="/static/js/zTree3.5/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.blockUI.js"></script>
+<script>
+    $(function () {
+        var eid = $('#eid').val();
+        if (eid != null && eid != undefined && eid != '') {
+            $('#form1').attr('action', 'update');
+            $('#pagedes').html("编辑角色");
+            document.title = '编辑角色';
+        }
+
+        var setting = {
+            check: {
+                enable: true,
+                dblClickExpand: false
+            }, view: {
+                fontCss: getFontCss
+            }, callback: {
+                onClick: onClick
+            }, data: {
+                key: {
+                    url: "_url"
+                }
+            }
+        };
+        function onClick(e, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo2");
+            zTree.expandNode(treeNode);
+        }
+
+        function getFontCss(treeId, treeNode) {
+            return (!!treeNode.highlight) ? { color: "#A60000", "font-weight": "bold" } : { color: "#333", "font-weight": "normal" };
+        }
+
+        loadMenusTree($("#eid").val());
+
+        //加载菜单树
+        function loadMenusTree(id) {
+            $.blockUI({
+                message: "数据加载中，请稍候...", css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .5,
+                    color: '#fff'
+                }
+            });
+            $.ajax({
+                url: "/cargogo/menu/getMenusByPid?pid=0",
+                type: "post",
+                data: {'id': id},
+                dataType: "text",
+                success: function (data, textStatus) {
+                    data = JSON.parse(data);
+                    if (data.status == 0) {
+                        var menus = data.body.data;
+                        var zNodes = eval('(' + JSON.stringify(menus) + ')');
+                        $.fn.zTree.init($("#treeDemo2"), setting, zNodes);
+                        jQuery.unblockUI();
+                        //$("#loading").hide();
+                        $("#role_name").focus();
+                    }
+                },
+                error: function () {
+                    //alert("error");
+                }
+            });
+        }
+
+        //编辑角色
+        $("#saveRoleBtn").click(function () {
+            $("#saveRoleBtn").attr("disabled", true);
+            if (!$("#form1").isValid()) {
+                $("#saveRoleBtn").removeAttr("disabled");
+                return;
+            }
+            var roleName = $('#roleName').val();
+            var istart = roleName.indexOf("ROLE_");
+            if (istart == -1) {
+                $("#saveRoleBtn").removeAttr("disabled");
+                alert('角色标识必须以ROLE_开头');
+                return;
+            }
+            $.blockUI({
+                message: "处理中，请稍候...", css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .5,
+                    color: '#fff'
+                }
+            });
+
+            var ids = "";
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo2");
+            var nodes = treeObj.getCheckedNodes(true);
+            for (var i = 0; i < nodes.length; i++) {
+                ids += nodes[i].id + ",";
+            }
+
+            $.ajax({
+                url: "save",
+                type: "post",
+                data: {
+                    privileges: ids,
+                    insertOrUpdate: $("#insertOrUpdate").val(),
+                    id: $("#eid").val(),
+                    roleName: roleName,
+                    roleRank: $("#roleRank").val(),
+                    roleStatus: $("#roleStatus").val()
+                },
+                dataType: "text",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if (data.status == 0) {
+                        // 							loadMenusTree();
+                        jQuery.unblockUI();
+                        alert("操作成功！");
+                        document.location = "/cargogo/role/selectList";
+                        // 						document.form1.submit();
+                    } else {
+                        jQuery.unblockUI();
+                        alert("操作失败！");
+                    }
+                },
+                error: function () {
+                    jQuery.unblockUI();
+                    alert("操作失败！");
+                }
+
+            });
+            return false;
+        });
+
+        //全部展开	
+        //$("#expandAllBtn").bind("click", {type:"expandAll"}, expandNode);
+        //$("#collapseAllBtn").bind("click", {type:"collapseAll"}, expandNode);
+        $("#expandOrCollapseAllBtn").bind("click", { type: "expandOrCollapse" }, expandNode);
+        $("#checkAllTrueOrFalse").bind("click", { type: "checkAllTrueOrFalse" }, expandNode);
+
+    });
+
+    var expandAllFlg = true;
+    var checkAllTrueOrFalseFlg = true;
+    function expandNode(e) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo2"),
+            type = e.data.type,
+            nodes = zTree.getSelectedNodes();
+
+
+        if (type == "expandAll") {
+            zTree.expandAll(true);
+        } else if (type == "collapseAll") {
+            zTree.expandAll(false);
+        } else if (type == "expandOrCollapse") {
+            zTree.expandAll(expandAllFlg);
+            expandAllFlg = !expandAllFlg;
+        } else if (type == "checkAllTrueOrFalse") {
+            zTree.checkAllNodes(checkAllTrueOrFalseFlg);
+            checkAllTrueOrFalseFlg = !checkAllTrueOrFalseFlg;
+        } else {
+            if (type.indexOf("All") < 0 && nodes.length == 0) {
+                alert("请先选择一个父节点");
+            }
+            var callbackFlag = $("#callbackTrigger").attr("checked");
+            for (var i = 0, l = nodes.length; i < l; i++) {
+                zTree.setting.view.fontCss = {};
+                if (type == "expand") {
+                    zTree.expandNode(nodes[i], true, null, null, callbackFlag);
+                } else if (type == "collapse") {
+                    zTree.expandNode(nodes[i], false, null, null, callbackFlag);
+                } else if (type == "toggle") {
+                    zTree.expandNode(nodes[i], null, null, null, callbackFlag);
+                } else if (type == "expandSon") {
+                    zTree.expandNode(nodes[i], true, true, null, callbackFlag);
+                } else if (type == "collapseSon") {
+                    zTree.expandNode(nodes[i], false, true, null, callbackFlag);
+                }
+            }
+
+        }
+    }
+
+
+</script> {% endblock %}

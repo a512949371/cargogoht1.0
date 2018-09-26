@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href="/static/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+	<link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+	<link href="/static/hplus/css/menu.css" rel="stylesheet">
+	<link href="/static//hplus/css/check.css" rel="stylesheet">
+	<!-- Data Tables -->
+	<link href="/static/hplus/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+	<link href="/static/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+	<link href="/static/select2/css/select2.min.css" rel="stylesheet">
+	<script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+	<script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="/static/hplus/js/plugins/jeditable/jquery.jeditable.js"></script>
+	<script src="/static/hplus/js/plugins/dataTables/jquery.dataTables.js"></script>
+	<script src="/static/hplus/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script src="/static/hplus/js/content.min.js?v=1.0.0"></script>
+	<script src="/static/layer/layer.js"></script>
+	<script src="/static/nice-validator/jquery.validator.js?local=zh-CN"></script>
+	<script src="/static/nice-validator/jquery.validator.js"></script>
+	<script src="/static/laydate/laydate.js"></script>
+	<script src="/static/custom/tableUtils.js"></script>
+	<script src="/static/select2/select2.min.js"></script>
+	<title>菜单管理_编辑</title>
+</head>
+
+<body>
+	<SCRIPT type="text/javascript">
+		$(function () {
+			$("#input_menu_name").focus();
+
+			$('input:radio[name="parentOrChildRadio"]').click(function () {
+				var parentOrChild = $(this).val();//子菜单还是根节点
+				if (parentOrChild == 0 || parentOrChild == 1) {
+					//添加顶级菜单
+					$("#result_table1").hide();
+				} else {
+					$("#result_table1").show();
+				}
+			});
+
+			//添加子菜单/修改父菜单
+			$("#add").click(function () {
+				var id = $("#input_menu_id").val();
+				var name = $("#input_menu_name").val();
+				var url = $("#input_menu_url").val();
+				var apiUrl = $("#input_menu__api_url").val();
+				var type = $("#input_menu_type").val();
+
+				var n_name = $("#input_new_menu_name").val();
+				var n_url = $("#input_new_menu_url").val();
+				var n_api_url = $("#input_new_menu_api_url").val();
+				var parentOrChild = $('input:radio[name="parentOrChildRadio"]:checked').val();//子菜单还是根节点
+				var n_type = $("#input_new_menu_type").val();
+
+				$.ajax({
+					url: "addOrUpdate",
+					type: "post",
+					data: {
+						updateP: 2,//-1不修改父菜单，1修改
+						//父菜单信息
+						id: id,
+						menuName: name,
+						menuUrl: url,
+						menuApiPath: apiUrl,
+						menuType: type,
+
+						//子菜单信息
+						n_name: n_name,
+						n_url: n_url,
+						n_api_url: n_api_url,
+						parentOrChild: parentOrChild,
+						n_type: n_type
+					},
+					dataType: "text",
+					success: function (data, textStatus) {
+						console.log('addOrUpdate_Status:' + data);
+						if (data == 'ok') {
+							layer.msg('修改资源菜单成功！');
+							setTimeout(function () { parent.location.reload(); }, 2000);
+						} else {
+							layer.msg('修改资源菜单失败！');
+							setTimeout(function () { parent.location.reload(); }, 2000);
+						}
+					},
+					error: function () {
+						layer.msg('修改资源菜单失败！');
+					}
+				});
+			});
+
+		})
+	</SCRIPT>
+	<style>
+		body {
+			text-align: center;
+			background-color: rgb(238, 238, 238);
+		}
+	</style>
+	<form action="/cargogo/menu/toAddOrUpdate" name="form1" method="post" theme="simple">
+		<div id="contians_div" style="text-align: right; border: 0px solid red; margin: auto;">
+			<div id="context_div" style="margin-top: 20px;">
+
+				<div id="showMsgDiv" style="text-align: center;"></div>
+				<div id="result_table1" class="menu-sub menu-sub1">
+					<div class="menu-tit">当前选中的菜单</div>
+					<div class="flex-box content-col" style="display: none;">
+						<div class="left-col">id</div>
+						<input class="right-col" id="input_menu_id" value="{{e.id}}" />
+					</div>
+					<div class="flex-box content-col" style="display: none;">
+						<div class="left-col">pid</div>
+						<input class="right-col" id="input_menu_pid" readonly="readonly" value="{{e.mid}}" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">名称</div>
+						<input class="right-col" type="text" id="input_menu_name" value="{{e.menuName}}" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">API地址</div>
+						<input class="right-col" type="text" id="input_menu__api_url" value="{{e.menuApiPath}}" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">前端url</div>
+						<input class="right-col" type="text" id="input_menu_url" value="{{e.menuUrl}}" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">类型</div>
+						<select id="input_menu_type" name="menuType" class="input-medium select-col">
+							{% if e.menuType == 'module' %}
+							<option value="module" selected="selected">模块</option>
+							{% else %}
+							<option value="module">模块</option>
+							{% endif %} {% if e.menuType == 'page' %}
+							<option value="page" selected="selected">页面</option>
+							{% else %}
+							<option value="page">页面</option>
+							{% endif %} {% if e.menuType == 'button' %}
+							<option value="button" selected="selected">按钮</option>
+							{% else %}
+							<option value="button">按钮</option>
+							{% endif %}
+						</select>
+					</div>
+				</div>
+
+
+				<div id="result_table2" class="menu-sub">
+					<div class="menu-tit menu-tit1">
+						<span>添加菜单</span>
+						<span>顶级模块</span><input type="radio" name="parentOrChildRadio" value="0" />
+						<span>顶级页面</span><input type="radio" name="parentOrChildRadio" value="1" /> 
+						<span>子模块</span><input type="radio" name="parentOrChildRadio" value="2" /> 
+						<span>子页面</span><input type="radio" name="parentOrChildRadio" value="3" /> 
+						<Span>功能</Span><input type="radio" name="parentOrChildRadio" value="4" checked="checked" />
+					</div>
+					<div class="flex-box content-col" style="display: none;">
+						<div class="left-col">id</div>
+						<input class="right-col" type="text" id="input_new_menu_id" readonly="readonly" />
+					</div>
+					<div class="flex-box content-col" style="display: none;">
+						<div class="left-col">pid</div>
+						<input class="right-col" type="text" id="input_new_menu_pid" readonly="readonly" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">名称</div>
+						<input class="right-col" type="text" id="input_new_menu_name" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">API地址</div>
+						<input class="right-col" type="text" id="input_new_menu_api_url" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">前端url</div>
+						<input class="right-col" type="text" id="input_new_menu_url" />
+					</div>
+					<div class="flex-box content-col">
+						<div class="left-col">类型</div>
+						<select id="input_new_menu_type" class="select-col">
+							<option value="">--请选择--</option>
+							<option value="module">模块</option>
+							<option value="page">页面</option>
+							<option value="button">功能</option>
+						</select>
+					</div>
+					<div class="flex-box content-col">
+						<input type="button" id="add" value="修改或添加" class="btn btn-primary btn-submit" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+
+</html>

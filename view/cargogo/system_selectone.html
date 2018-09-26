@@ -1,0 +1,141 @@
+{% extends "./base_toAdd.html" %}
+{% block customTitle_src %}
+<div class="ibox-title">
+	<h5>运营端用户管理</h5>
+</div>
+{% endblock %} 
+{% block form_top %}
+{% endblock %}
+{% block form %}
+<div class="addsmark-box" id="Addsmark">
+	<div class="addsmark flex-box">
+		<div class="left">姓名：</div>
+		<input class="right" type="text" value="{{infodata.realName}}"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">昵称：</div>
+		<input class="right" type="text" value="{{infodata.nickName}}"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">员工账号：</div>
+		<div class="right">{{infodata.userName}}</div>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">手机号：</div>
+		<input class="right" type="text" value="{{infodata.telephone}}"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">新密码：</div>
+		<input class="right" type="password"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">角色：</div>
+		<select class="right">
+			<option value="">请选择所属角色</option>
+			{% for item in rolelist %}
+			 {% if item.id == infodata.rid %}
+			 <option value="{{item.id}}" selected="selected">{{item.roleRank}}</option>
+			 {% else %}
+			 <option value="{{item.id}}">{{item.roleRank}}</option>
+			 {% endif %}
+			{% endfor %}
+		</select>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">邮箱：</div>
+		<input class="right" type="text" value="{{infodata.email}}"/>
+	</div>
+</div>
+{% endblock %}
+{% block form_submit %}
+<div class="addsmark-btn-box flex-box-center">
+	<div class="btn btn-primary btn-xs" data-id="{{infodata.id}}" onclick="Trueupdata($(this))">提交</div>
+	<div class="btn btn-default btn-xs" onclick="Closefixed()">取消</div>
+</div>
+<script>
+	// 手机号判断
+	function  phoneTF(data) {
+	    if ((/^1[34578]\d{9}$/.test(data))) {
+	      return true
+	    } else {
+	      return false
+	    }
+	  };
+	//邮箱验证
+	function Email(data){
+		if((/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(data))){
+			return true
+		}else{
+			return false
+		}
+	};
+	//关闭弹窗
+    function Closefixed(){
+    	var index = parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+    }
+	var groupdata={
+		id:'',
+		realName:'',
+		nickName:'',
+		telephone:'',
+		passWord:'',
+		rid:'',
+		email:'',
+	};
+	//关闭弹窗
+    function Closefixed(){
+    	var index = parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+    }
+    //确认修改
+    function Trueupdata(obj){
+    		groupdata.realName=$("#Addsmark").find("input").eq(0).val();
+    		groupdata.nickName=$("#Addsmark").find("input").eq(1).val();
+    		groupdata.telephone=$("#Addsmark").find("input").eq(2).val();
+    		groupdata.passWord=$("#Addsmark").find("input").eq(3).val();
+    		groupdata.rid=$("#Addsmark").find("select :selected").eq(0).val();
+    		groupdata.email=$("#Addsmark").find("input").eq(4).val();
+    		groupdata.id=obj.attr("data-id");
+    	console.log(groupdata)
+    	if(groupdata.realName!=''&&groupdata.nickName!=''&&phoneTF(groupdata.telephone)&&groupdata.rid!=''&&Email(groupdata.email)){
+			$.ajax({
+	    		type:"post",
+	    		url:"edituser",
+	    		async:true,
+	    		data:groupdata,
+	    		success:function(data){
+	    			if(data.status==0){
+	    				layer.msg('编辑成功');
+						var index = parent.layer.getFrameIndex(window.name);
+						setTimeout(function(){
+							parent.layer.close(index);
+							window.parent.location.reload()
+							}, 1000);
+					}else if(data.status==401){
+						window.location.href='/auth/login'
+					}else{
+	    				layer.msg(data.msg);
+	    			}
+	    		}
+	    	});    		
+    	}else{
+    		if(groupdata.realName==''){
+    			layer.msg('姓名不能为空');
+    		}else if(groupdata.nickName==''){
+    			layer.msg('昵称不能为空');
+    		}else if(!phoneTF(groupdata.telephone)){
+    			layer.msg('请输入正确的手机号');
+    		}else if(!Email(groupdata.email)){
+    			layer.msg('请输入正确的邮箱');
+    		}
+    		else{
+    			layer.msg('角色不能为空');
+    		}
+    	}
+    	
+    }
+</script>
+{% endblock %}
+{% block form_scr %}
+{% endblock %}

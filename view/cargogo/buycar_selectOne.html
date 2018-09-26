@@ -1,0 +1,107 @@
+{% extends "../cargogo/base_toAdd.html" %} 
+{% block form_top %} 
+{% endblock %} 
+{% block content_top %}
+<div class="panel-heading">
+    <div class="panel-options">
+        <input type="hidden" id="pageStatus"  value="{{pageStatus}}" name="pageStatus">
+        <ul class="nav nav-tabs">
+            <li class="{{'active' if pageStatus==null else ''}}">
+                <a href="selectOne?id={{id}}">基本信息</a>
+            </li>
+            <li class="{{'active' if pageStatus==1 else ''}}">
+                <a href="orderList?pageStatus=1&id={{id}}">订单记录</a>
+            </li>
+        </ul>
+    </div>
+</div> 
+{% endblock %}
+{% block form %}
+<input  type="hidden" name="status" class="form-control" value="{{e.status}}">
+<div class="form-group">
+    <label class="col-sm-3 control-label">姓名：</label>
+    <div class="col-sm-7">
+    <label class="control-label"> {{e.realName}}</label>
+    </div>
+</div>
+<div class="form-group">
+        <label class="col-sm-3 control-label">身份证号：</label>
+        <div class="col-sm-7">
+            <label class="control-label">{{e.idCard}}</label>
+        </div>
+    </div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">手机号：</label>
+    <div class="col-sm-7">
+        <label class="control-label">{{e.phone}}</label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">银行卡号：</label>
+    <div class="col-sm-7">
+        <label class="control-label">{{e.bankCard}}</label>
+    </div>
+</div>
+<div class="form-group">
+        <label class="col-sm-3 control-label">地址：</label>
+        <div class="col-sm-7">
+            <label class="control-label">{{e.address}}</label>
+        </div>
+    </div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">用户状态：</label>
+    <div class="col-sm-7">
+        <label class="control-label">{% if e.status==0 %}
+            正常
+        {% endif %}{% if e.status==-1 %}
+            冻结
+        {% endif %}{% if e.status==1 %}
+            解冻
+        {% endif %}</label>
+    </div>
+</div>
+<div class="form-group">
+        <label class="col-sm-3 control-label">冻结时间：</label>
+        <div class="col-sm-7">
+            <label class="control-label">{{e.disableTime}}</label>
+        </div>
+    </div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">解冻时间：</label>
+    <div class="col-sm-7">
+        <label class="control-label">{{e.thawTime}}</label>
+    </div>
+</div>
+<div class="form-group">
+        <label class="col-sm-3 control-label">身份证照片：</label>
+        <a id="tong" class="fancybox" onclick="" >
+            <img   alt="image" src="{{e.idCardFront}}">
+        </a>
+        <a id="tong" class="fancybox" onclick="" >
+            <img   alt="image" src="{{e.idCardHand}}">
+        </a>
+        <a id="tong" class="fancybox" onclick="" >
+            <img   alt="image" src="{{e.idCardReverse}}">
+        </a>
+    </div>
+
+    <div class="form-group">
+            <label class="col-sm-3 control-label">驾驶证照片：</label>
+            <a id="tong" class="fancybox" onclick="" >
+                <img   alt="image" src="{{e.drivingFront}}">
+            </a>
+            <a id="tong" class="fancybox" onclick="" >
+                <img   alt="image" src="{{e.drivingReverse}}">
+            </a>
+            
+        </div>
+
+{% endblock %} 
+{% block form_submit %}
+{% endblock %}
+{% block form_custom %}
+<script>
+       
+</script>
+{% endblock %}

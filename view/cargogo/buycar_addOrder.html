@@ -1,0 +1,43 @@
+{% extends "../cargogo/base_toAdd.html" %}
+ {% block form_top %} 
+ {% endblock %} 
+ {% block form %}
+<input type="hidden" name="status" class="form-control" value="{{e.status}}">
+<div class="form-group">
+    <label class="col-sm-3 control-label">姓名：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.rentTime}}" id="rentTime" name="rentTime" class="form-control" data-rule="员工姓名:required:rentTime;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">电话：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.rentTime}}" id="rentTime" name="rentTime" class="form-control" data-rule="电话号码:required:rentTime;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">购买车辆：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.rentTime}}" id="rentTime" name="rentTime" class="form-control" data-rule="身份证号:required:rentTime;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">车辆总价：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.rentTime}}" id="rentTime" name="rentTime" class="form-control" data-rule="职位:required:rentTime;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">购车时间：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.rentTime}}" id="rentTime" name="rentTime" class="form-control" data-rule="入职时间:required:rentTime;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">代理人：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.rentTime}}" id="rentTime" name="rentTime" class="form-control" data-rule="代理人:required:rentTime;">
+    </div>
+</div>
+
+{% endblock %} {% block form_custom %} {% endblock %}

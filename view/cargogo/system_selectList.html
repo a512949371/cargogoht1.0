@@ -1,0 +1,144 @@
+{% extends "./base_list.html" %}
+{% block customTitle_src %}
+<div class="ibox-title">
+	<h5>运营端用户管理</h5>
+</div>
+{% endblock %} 
+{% block content_top %}
+<div class="flex-box-enter">
+		<div>&nbsp;</div>
+	<div>
+		<div class="top-search-box">
+		<div class="qcode-box" onclick="Adddetail($(this))"><i class="fa fa-plus" style="padding-right: 5px;"></i>新增</div>
+		</div>
+	</div>
+</div>
+<script>
+	function Adddetail(){
+		layer.open({
+		  type: 2,
+		  title: '新增用户',
+		  shadeClose: true,
+		  shade: 0.8,
+		  area: ['600px', '500px'],
+		  content: 'adduser' //iframe的url
+		});
+	}
+	function Searchparme(){
+		$("#pageNum").val("1");
+		document.forms[0].submit();
+	}
+</script>
+{% endblock %}
+{% block search_bt %}
+{% endblock %}
+{% block table_th %}
+	<th>编号</th>
+	<th>用户昵称</th>
+	<th>真实姓名</th>
+	<th>账号</th>
+	<th>手机号</th>
+	<th>状态</th>
+	<th>创建人</th>
+	<th>创建时间</th>
+	<th>操作</th>
+{% endblock %}
+{% block table_body %}
+{% for item in pageInfo.records %}
+<tr class="gradeX">
+	<td><input type="checkbox" name="ids" value="{{item.id}}"/></td>
+	<td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+	<td>{{item.nickName}}</td>
+	<td>{{item.realName}}</td>
+	<td>{{item.userName}}</td>
+	<td>{{item.telephone}}</td>
+	<td>{% if item.status=='y' %}<span>正常</span>{% else %}<span>禁用</span>{% endif %}</td>
+	<td>{{item.createAccount}}</td>
+	<td>{{item.createTime}}</td>
+	<td>
+		<button type="button" class="btn btn-warning btn-xs" data-id = "{{item.id}}" onclick="Changestatus($(this))">
+			{% if item.status == 'y' %}
+			<i class="fa fa-toggle-off" style="padding-right: 5px;"></i>冻结
+			{% else %}
+			<i class="fa fa-toggle-on" style="padding-right: 5px;"></i>解冻
+			{% endif %}
+		</button>
+		{% if Btn['system/user/select'] %}
+		<button type="button" class="btn btn-primary btn-xs" data-id = "{{item.id}}" onclick="Lookdetail($(this))">
+				<i class="fa fa-list" style="padding-right: 5px;"></i>查看</button>
+		{% endif %}
+		{% if Btn['system/user/delete'] %}
+		<button type="button" class="btn btn-danger btn-xs" data-id = "{{item.id}}" onclick="Deletedetail($(this))">
+				<i class="fa fa-trash" style="padding-right: 5px;"></i>删除</button>
+		{% endif %}
+	</td>
+</tr>
+{% endfor %}
+<script>
+	function Lookdetail(obj){
+		layer.open({
+			  type: 2,
+			  title: '查看用户详情',
+			  shadeClose: true,
+			  shade: 0.8,
+			  area: ['600px', '500px'],
+			  content: 'selectone?id='+obj.attr("data-id") //iframe的url
+			});
+	}
+	//冻结账户
+	function Changestatus(obj){
+		  $.ajax({
+		  	type:"get",
+		  	url:"changeuserone?id="+obj.attr("data-id"),
+		  	async:true,
+		  	success:function(data){
+		  		if(data.status==0){
+		  			layer.msg('用户状态改变成功');
+		  			setTimeout(function(){
+		  				window.location.reload()
+		  			},1000)
+					}else if(data.status==401){
+						window.location.href='/auth/login'
+					}else if(data.status==404){
+						location.href='/operate/404'
+					}else if(data.status==500){
+						location.href='/operate/500'
+					}else{
+		  			layer.msg(data.msg);
+		  		}
+		  		
+		  	}
+		  });
+	}
+	function Deletedetail(obj){
+		layer.confirm('您确定要删除该用户？', {
+		  btn: ['是的','取消'] //按钮
+		}, function(){
+		  $.ajax({
+		  	type:"get",
+		  	url:"removeuserone?id="+obj.attr("data-id"),
+		  	async:true,
+		  	success:function(data){
+		  		if(data.status==0){
+		  			layer.msg('删除成功');
+		  			setTimeout(function(){
+		  				window.location.reload()
+		  			},1000)
+					}else if(data.status==401){
+						window.location.href='/auth/login'
+					}else if(data.status==404){
+						location.href='/operate/404'
+					}else if(data.status==500){
+						location.href='/operate/500'
+					}else{
+		  			layer.msg(data.msg);
+		  		}
+		  		
+		  	}
+		  });
+		}, function(){
+		  console.log("取消")
+		});
+	}
+</script>
+{% endblock %}

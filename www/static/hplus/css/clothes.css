@@ -1,0 +1,853 @@
+.flex-box{
+	display: flex;
+	align-items: center;
+}
+.flex-box-end{
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+.flex-box-center{
+	display: flex;
+	justify-content:center;
+	align-items: center;
+}
+.flex-box-enter{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.mt10{
+	margin-top: 10px;
+}
+.mt20{
+	margin-top: 20px;
+}
+.mt40{
+	margin-top: 40px;
+}
+.ml{
+	margin-left: 10px;
+}
+input::-webkit-input-placeholder{
+    color:#e0e0e0;
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:#e0e0e0;
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:#e0e0e0;
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:#e0e0e0;
+}
+td input{
+	width: 100%;
+}
+.ibox-tit{
+	border-bottom:1px solid #e5e5e5 ;
+}
+.ibox-tit .clothes-abox{
+	padding: 10px;
+	color: #666;
+}
+.btn-box22{
+	width: 100px;
+	text-align: center;
+	padding: 5px 0;
+	background-color: #0071CE;
+	color: #FFF;
+	cursor: pointer;
+	margin-left: 10px;
+}
+.ml10{
+	margin-left: 10px;
+}
+.ml40{
+	margin-left: 40px;
+}
+.mb20{
+	margin-bottom: 20px;
+}
+.clothes-abox.active{
+	color: #FFF;
+	background-color: #1ab394;
+}
+.top-search-box{
+	display: flex;
+	padding:0;
+}
+.top-search-box input{
+	min-width: 300px;
+	padding-left: 20px;
+	height: 34px;
+	line-height: 34px;
+	border: 1px solid #ccc;
+	margin-left: -1px;
+}
+.top-search-box .search-desc{
+	padding:0 10px;
+	height: 34px;
+	line-height: 34px;
+	border: 1px solid #ccc;
+}
+.top-search-box .btn-box{
+	width: 64px;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	background-color: #1ab394;
+	color: #FFF;
+	cursor: pointer;
+}
+.top-search-box select{
+	height: 34px;
+	line-height: 34px;
+	padding: 0 10px;
+	margin-left: -1px;
+	border: 1px solid #ccc;
+}
+.qcode-box{
+	width: 100px;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	background-color: #1ab394;
+	color: #FFF;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.classify-box{
+	text-decoration:underline;
+	color: #0055AA;
+}
+.orderdetail-box{
+	padding: 20px;
+	height: 100%;
+	box-sizing: border-box;
+	background-color: #fff;
+}
+
+.orderdetail-box .content-box{
+}
+.orderdetail-box .content-box .tit-box{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #e5e5e5;
+}
+.orderdetail-box .content-box .tit-box h3{
+	margin: 0;
+	padding: 6px 10px;
+	color: #fff;
+	font-weight: 100;
+}
+.orderdetail-box .content-box ul{
+	border: 1px solid #e5e5e5;
+}
+.orderdetail-box .content-box li{
+	margin: 0;
+	padding: 8px 10px;
+	border-bottom: 1px solid #e5e5e5;
+}
+.orderdetail-box .content-box li input{
+	border: none;
+}
+.orderdetail-box .content-box li textarea{
+	border: none;
+}
+.orderdetail-box .content-box .tit-box .close{
+	font-size: 14px;
+	color: #888;
+}
+.orderdetail-box .content-box .clothes-num-box{
+	display: flex;
+	align-items: center;
+	
+	margin-top: 40px;
+}
+.orderdetail-box .content-box .clothes-num-box h3{
+	font-size: 16px;
+	color: #666;
+	margin: 0;
+	font-weight: 100;
+}
+.orderdetail-box .content-box .clothes-num-box .hand-m-btn{
+	width: 90px;
+	text-align: center;
+	color: #666;
+	padding: 2px 0;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 1px solid #e5e5e5;
+	background-color: #e5e5e5;
+}
+.orderdetail-box .content-box .clothes-num-box .hand-m-btn1{
+	width: 120px;
+	text-align: center;
+	color: #FFF;
+	/* margin: 0 20px; */
+	padding: 5px 0;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.orderdetail-box .content-box .clothes-num-box .automatic-btn{
+	width: 120px;
+	text-align: center;
+	border: 1px solid #1ab394;
+	background-color: #1ab394;
+	color: #FFF;
+	padding: 5px 0;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.orderdetail-box .content-box .remarks-box{
+	display: flex;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+.orderdetail-box .content-box .remarks-box h3{
+	font-size: 16px;
+	color: #666;
+	font-weight: 100;
+}
+.orderdetail-box .content-box .remarks-box textarea{
+	height: 60px;
+	line-height: 30px;
+	width: 300px;
+}
+.orderdetail-box .content-box  .trueclothes-box{
+	width: 120px;
+	padding: 8px 0;
+	text-align: center;
+	background-color: #1ab394;
+	color: #FFF;
+	cursor: pointer;
+	margin: auto;
+	border-radius: 4px;
+}
+.fixed-box{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 999;
+	display: none;
+}
+.fixed-box .shaw{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	background-color: rgba(0,0,0,0.5);
+}
+#bagcodeadd {
+	width: 300px;
+	padding: 15px 0;
+	position: fixed;
+	top: 40%;
+	left: calc(50% - 150px);
+	z-index: 1001;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	font-size: 14px;
+}
+#bagcodeadd .disone{
+	display: none;
+}
+#bagcodeadd  .clothes-num-box{
+	display: flex;
+	align-items: center;
+	margin: 20px 10px;
+	border: 1px solid #ccc;
+}
+#bagcodeadd  h3{
+	font-size: 14px;
+	font-weight: 100;
+	color: #666;
+	text-align: center;
+	margin: 0;
+	padding: 6px 0;
+	width: 120px;
+	border-right: 1px solid #ccc;
+}
+#bagcodeadd  input{
+	border: none;
+	outline: none;
+	padding-left: 10px;
+}
+.orderdetail-box .hand-clothes-num{
+	width: 300px;
+	padding: 15px 0;
+	position: fixed;
+	top: 40%;
+	left: calc(50% - 150px);
+	z-index: 1001;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	font-size: 14px;
+}
+.orderdetail-box .disone{
+	display: none;
+}
+.orderdetail-box .distwo{
+	display: none;
+}
+.orderdetail-box .disthree{
+	display: none;
+}
+.orderdetail-box .hand-clothes-num .tit-box{
+	justify-content: flex-end;
+	height: 40px;
+	border-bottom: 1px solid #999;
+	padding: 0 20px;
+}
+.orderdetail-box .hand-clothes-num .clothes-num-box{
+	display: flex;
+	align-items: center;
+	margin: 20px 10px;
+	border: 1px solid #ccc;
+}
+.orderdetail-box .hand-clothes-num h3{
+	font-size: 14px;
+	font-weight: 100;
+	color: #666;
+	text-align: center;
+	margin: 0;
+	padding: 6px 0;
+	border-right: 1px solid #ccc;
+}
+.orderdetail-box .hand-clothes-num input{
+	border: none;
+	outline: none;
+	padding-left: 10px;
+}
+.orderdetail-box .clothes-num{
+	margin: 10px 0;
+}
+.orderdetail-box .clothes-num li{
+	list-style: none;
+	width: 200px;
+	padding: 5px 10px;
+	border: 1px solid #999;
+	color: #666;
+	display: flex;
+	margin-left: -1px;
+	margin-top: -1px;
+	justify-content: space-between;
+	border-radius: 3px;
+}
+.orderdetail-box .hand-clothes-num .btn-box{
+	width: 120px;
+	background-color: #1ab394;
+	color: #FFF;
+	padding: 5px 0;
+	text-align: center;
+	cursor: pointer;
+	margin: 10px auto 10px auto;
+	border-radius: 4px;
+}
+.orderdetail-box .hand-clothes-num .clothes-num-box h3{
+	width: 120px;
+	margin: 0;
+}
+.orderdetail-box .hand-clothes-num .clothes-num-box select{
+	padding: 3px 0;
+	flex: 1;
+	border: none;
+	outline: none;
+}
+.orderdetail-box .hand-clothes-num .tip{
+	color: #F00;
+	font-size: 12px;
+	padding:0 20px;
+	margin-bottom: 15px;
+}
+/*捡单录入*/
+.getorderinfo-box{
+	padding:20px;
+	background-color: #e5e5e5;
+}
+.getorderinfo-box>div{
+	background-color: #FFF;
+	padding-left: 10px;
+}
+.getorderinfo-box .bord{
+	border-bottom: 15px solid #e5e5e5;
+}
+.getorderinfo-box .tit-box{
+	display: flex;
+	align-items: center;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	border-bottom: 1px solid #e5e5e5;
+}
+.getorderinfo-box .tit-box h3{
+	font-size: 16px;
+	color: #666;
+	margin: 0;
+	font-weight: 100;
+	padding-right: 10px;
+}
+.getorderinfo-box .tit-box span{
+	margin:0 10px;
+}
+.getorderinfo-box .tit-box .desc{
+	font-size: 14px;
+	color: #666;
+	padding-left:5px ;
+}
+.getorderinfo-box .list-box{
+	width: 100%;
+	margin: 10px auto 10px auto;
+	padding: 5px;
+	box-sizing: border-box;
+	height: 150px;
+	overflow-y: scroll;
+}
+.getorderinfo-box .list-box ul{
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0;
+}
+.getorderinfo-box .list-box li{
+	padding: 5px 8px;
+	box-sizing: border-box;
+	background-color: #aaa;
+	color: #FFF;
+	margin: 5px 10px;
+	list-style: none;
+}
+.getorderinfo-box .list-box .searchbrand-box{
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+}
+.getorderinfo-box .list-box .searchbrand-box .btn-box{
+	padding: 2px 10px;
+	border: 1px solid #0071CE;
+	background-color: #0071CE;
+	color: #FFF;
+	cursor: pointer;
+}
+.getorderinfo-box .list-box .active{
+	background-color: #ccc;
+	color: #666;
+}
+.getorderinfo-box .load-more{
+	text-align: center;
+}
+#Errorderbox{
+	display: none;
+}
+.layer-alert{
+	padding: 10px 20px;
+}
+.layer-alert .box{
+	padding-top: 10px;
+}
+/*新增汽车字典*/
+.newcarpar-box{
+	border: 1px solid #e5e5e5;
+	padding:20px 40px;
+}
+.newcarpar-navbox ul.navlist{
+	
+}
+.newcarpar-navbox ul.navlist li{
+	flex: 1;
+	padding-bottom: 5px;
+	border-bottom:1px solid #e5e5e5 ;
+	text-align: center;	
+	cursor: pointer;
+}
+.newcarpar-navbox ul.navlist li.active{
+	flex: 1;
+	margin-top: 1px;
+	padding-bottom: 4px;	
+	color: #0079fe;
+	border-bottom:2px solid #0079fe ;
+}
+.carbrand-box{
+	margin-top: 10px;
+	max-height: 120px;
+	overflow-y: scroll;
+}
+.carbrand-box ul.brand {
+	flex-wrap: wrap;
+}
+.carbrand-box ul.brand li{
+	padding: 5px 10px;
+	cursor: pointer;
+}
+.carbrand-box ul.brand li.active{
+	background-color: #0079fe;
+	color: #fff;
+}
+.parlist-box{
+	padding: 0 20px;
+}
+.parlist-box .parlist{
+	border-bottom:1px solid #e5e5e5;
+	padding: 10px 0;
+}
+.parlist-box .parlist .left-box{
+	width: 60px;
+}
+.parlist-box .parlist .right-box{
+	flex: 1;
+	margin-bottom: 0;
+}
+.parlist-box .parlist .right-box .box{
+	padding-left: 40px;
+}
+.parlist-box .parlist .right-box .box .txt-box{
+	padding: 3px 10px;
+	font-size: 12px;
+	cursor: pointer;
+}
+.parlist-box .parlist .right-box .box .txt-box.active{
+	background-color: #0079fe;
+	color: #fff;
+	border-radius: 10px;
+}
+.carlist-box{
+	padding: 20px;
+}
+.carlist-box ul.carlist{
+	flex-wrap: wrap;
+}
+.carlist-box ul.carlist li{
+	padding: 20px;
+	width: 25%;
+}
+.carlist-box ul.carlist li .bor{
+	border:1px solid #e5e5e5;
+	padding: 5px;
+}
+.carlist-box ul.carlist li .img{
+	width: 200px;
+	height: 160px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+}
+.carlist-box ul.carlist li .img img{
+	width: 100%;
+}
+.carlist-box ul.carlist li .txt{
+	padding: 10px 5px;
+	height: 70px;
+	line-height: 35px;
+	font-size: 14px;
+	color: #333;
+}
+.appointnum-box .other{
+	border: none;
+	padding: 0 10px;
+	display: inline-block;
+	line-height: 28px;
+	color: #666;
+}
+.appointnum-box input{
+	padding: 3px;
+	width: 60px;
+}
+.closecar-btn{
+	padding: 5px 20px;
+	background-color: #0079fe;
+	font-size: 16px;
+	border-radius: 5px;
+	color: #fff;
+	margin-top: 20px;
+}
+.carnum{
+	border: none;
+	background-color: #fff;
+}
+/*车辆信息编辑*/
+.editcar-parbox{
+	padding: 20px 40px;
+	flex-wrap: wrap;
+}
+.editcar-parbox .editcar-par{
+	width: 40%;
+	border: 1px solid #e5e5e5;
+	padding: 5px 10px;
+	margin-right: 10%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+}
+.editcar-parbox .editcar-par .editcar-desc{
+	padding: 0 10px;
+}
+.red{
+	color: #f00;
+}
+.editcar-parbox .editcar-par .editcar-input{
+	border-left: 1px solid #e5e5e5;
+	flex: 1;
+	padding-left: 10px;
+}
+.editcar-parbox .editcar-par .editcar-input select{
+	border: none;
+	width: 100%;
+}
+.editcar-parbox .editcar-par .editcar-input select:focus{
+	outline: none;
+}
+.editcar-parbox .editcar-par .editcar-input input{
+	border: none;
+	width: 100%;
+}
+.editcar-parbox .editcar-par .editcar-input input:focus{
+	outline: none;
+}
+.stages-box{
+	margin-top: 20px;
+}
+.stages-box .stages-btn{
+	padding: 7px 20px;
+	background-color: #0079fe;
+	color: #fff;
+	border-radius: 5px;
+	font-size: 14px;
+	width: 100px;
+	text-align: center;
+	cursor: pointer;
+}
+.stages-box .stages-list-box{
+	margin-top: 10px;
+	border:1px solid #f0f0f0;
+}
+.stages-box .stages-nav{
+	flex: 1;
+	background-color: #f0f0f0;
+	color: #666;
+	padding: 20px 0;
+	text-align: center;
+	position: relative;
+}
+.stages-box .stages-nav.active{
+	background-color: #fff;
+}
+.stages-box .stages-nav .close-icon{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 20px;
+	height: 20px;
+	border-radius: 20px;
+	border:1px solid #666 ;
+	font-size: 12px;
+	color: #666;
+	text-align: center;
+	display: none;
+}
+.stages-box .stages-nav.active .close-icon{
+	display: block;
+}
+.stages-box .stages-num .desc{
+	padding-right: 60px;
+	padding-left: 40px;
+	font-size: 20px;
+	color: #141414;
+	font-weight: bold;
+}
+.stages-box .stages-num input[type=checkbox]{
+	margin: 0;
+}
+.switch-change {
+    width: 60px;
+    height: 24px;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 16px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    user-select: none;
+    outline: none;
+}
+.switch-change:before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.switch-change:checked {
+    border-color: #0079fe;
+    box-shadow: #0079fe 0 0 0 16px inset;
+    background-color: #0079fe;
+}
+.switch-change:checked:before {
+    left: 36px;
+}
+.switch-change.switch-anim {
+    transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
+}
+.switch-change.switch-anim:before {
+    transition: left 0.3s;
+}
+.switch-change.switch-anim:checked {
+    box-shadow: #0079fe 0 0 0 16px inset;
+    background-color: #0079fe;
+    transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s;
+}
+.switch-change.switch-anim:checked:before {
+    transition: left 0.3s;
+}
+.stages-box .stages-par-box{
+	padding-left: 40px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.stages-box .stages-par-box .stages-par{
+	flex: 1;
+}
+.stages-box .stages-par-box .stages-par input{
+	padding-left: 10px;
+}
+.stages-box .stages-par-box .desc{
+	padding-right: 20px;
+	color: #646464;
+	font-size: 14px;
+}
+.stages-box  .stages-list{
+	padding-top: 30px;
+}
+.stages-box  .stages-list .stages{
+	display: none;
+}
+.stages-box  .stages-list .stages.active{
+	display: block;
+}
+.carist-btn-box{
+	margin-top: 40px;
+}
+.carist-btn-box .btn{
+	width: 120px;
+	padding: 5px 20px;
+	color: #FFF;
+	background-color: #0079fe;
+	text-align: center;
+	border-radius: 5px;
+}
+.cardic-tit{
+	text-align: center;
+	color: #141414;
+	font-size: 28px;
+	font-weight: bold;
+}
+.page-box{
+	text-align: center;
+	color: #0079fe;
+	font-size: 16px;
+	padding: 10px;
+}
+.gradeX .img{
+	width:64px;
+	height: 64px;
+	align-items: center;
+}
+.gradeX .img img{
+	width: 100%;
+}
+.gradeX input{
+	border: none;
+}
+.gradeX input[type=checkbox]{
+	border: 1px solid #e5e5e5;
+}
+.alert-brand{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom:0;
+	z-index: 99;
+	display: none;
+}
+.alert-brand .shaw{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom:0;
+	z-index: 100;
+	background-color: rgba(0,0,0,0.5);
+}
+.alert-brand .content{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+	background-color: #fff;
+	z-index: 101;
+	max-height: 300px;
+	overflow-y: scroll;
+}
+/*角色查看*/
+.addsmark-box{
+	width: 100%;
+}
+.addsmark-box .addsmark{
+    width: 100%;
+    font-size: 14px;
+    color: #676a6c;
+    margin-top: 10px;
+    margin-left: -15px;
+}
+.addsmark-box .addsmark .left{
+    padding-right: 10px;
+    width: 100px;
+    color: #676a6c;
+    text-align: right;
+}
+.addsmark-box .addsmark .right{
+	flex: 1;
+	/* padding: 3px 10px; */
+	font-size: 14px;
+}
+.addsmark-box .addsmark input{
+	padding: 5px 10px;
+	color: #676a6c;
+	font-size: 12px;
+}
+.addsmark-box .addsmark select{
+	padding: 5px 10px;
+    color: #676a6c;
+}
+.addsmark-box .addsmark .map{
+	width: 16px;
+	height: 16px;
+	margin-left: 10px;
+}
+.addsmark-box .addsmark .map img{
+	width: 100%;
+}
+.addsmark-btn-box{
+	display: flex;
+	text-align: center;
+	margin: 10px 0;
+}
+.addsmark-btn-box .btn{
+	padding: 5px 20px;
+	display: inline-block;
+	margin: 0 10px;
+}

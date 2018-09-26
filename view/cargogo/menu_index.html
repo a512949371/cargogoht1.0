@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="shortcut icon" href="favicon.ico">
+	<link href="/static/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+	<link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+	<link href="/static//hplus/css/clothes.css" rel="stylesheet">
+	<link href="/static//hplus/css/check.css" rel="stylesheet">
+	<!-- Data Tables -->
+	<link href="/static/hplus/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+	<link href="/static/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+	<link href="/static/select2/css/select2.min.css" rel="stylesheet">
+	<script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+	<script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="/static/hplus/js/plugins/jeditable/jquery.jeditable.js"></script>
+	<script src="/static/hplus/js/plugins/dataTables/jquery.dataTables.js"></script>
+	<script src="/static/hplus/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script src="/static/hplus/js/content.min.js?v=1.0.0"></script>
+	<script src="/static/layer/layer.js"></script>
+	<script src="/static/nice-validator/jquery.validator.js?local=zh-CN"></script>
+	<script src="/static/nice-validator/jquery.validator.js"></script>
+	<script src="/static/laydate/laydate.js"></script>
+	<script src="/static/custom/tableUtils.js"></script>
+	<script src="/static/select2/select2.min.js"></script>
+	<title>菜单管理</title>
+	<!-- ztree -->
+<link href="/static/js/zTree3.5/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+<script src="/static/js/zTree3.5/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.blockUI.js"></script>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight" style="padding-top:0;">
+	<form action="" name="form1" style="display: none;">
+	    <input type="hidden" value="{{e.id}}" name="id" id="dfsfsf">
+	</form>
+    <div class="row menu-con">
+		<div class="col-md-12" style="background-color: #ffffff;">
+			<div style=" padding: 10px 0;">
+				<div>
+					<span style="color: red;">在父菜单下的所有子菜单全部勾选的情况下，是否级联删除父菜单：</span>
+					<input type="checkbox" id="deleteParent">
+					<span>提示：点击菜单项，此处则能编辑该菜单项或增加顶级菜单或子菜单项。</span>
+				</div>
+				<div>
+					<input type="button" id="deleteMenus" value="删除选择的菜单" class="btn btn-danger"/>
+					(默认只删除叶子菜单)[<a id="expandOrCollapseAllBtn" href="#" title="展开/折叠全部资源" onclick="return false;">展开/折叠</a>]
+				</div>
+			</div>
+				
+				<font color="red"></font>
+				
+		</div>
+		<div class="col-md-3" style="padding: 10px 10px;">
+			<div style=" background-color: #ffffff; min-height: 670px">
+				<div id="loadImg" style="text-align: center;">
+					<img alt="菜单加载中......" src="/static/images/loader.gif">资源加载中...
+				</div>			
+				<ul id="treeDemo2" style="display: none;" class="ztree"></ul>
+			</div>
+		</div>
+		<div class="col-md-9" style="padding: 0">
+			<iframe src="" width="100%" id="iframeMenuEdit" height="680" scrolling="no" frameborder="">
+				点击菜单项，此处则能编辑该菜单项或增加顶级菜单或子菜单项。
+			</iframe>
+		</div>
+
+<script>
+$(function(){
+var setting = {
+		check: {
+			enable: true,
+			dblClickExpand: false
+		},callback: {
+			onClick: function(e,treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo2");
+                zTree.expandNode(treeNode);
+            },
+			onMouseDown: function (event, treeId, treeNode) {
+				var url = "";
+				try {
+					url = "/cargogo/menu/toAddOrUpdate?id="+treeNode.id;
+				} catch(err) {
+				}
+                if(true){
+                    $("#iframeMenuEdit").attr("src",url);
+                    return;
+                }
+                //alert(url);
+                $("#dfsfsf").val(treeNode.id);
+                document.form1.action = url;
+                document.form1.submit();
+            }
+		},
+        data:{
+            key:{
+                url:"_url"
+            }
+        }
+};
+
+loadMenusTree();
+
+//加载菜单树
+function loadMenusTree(){
+	$.ajax({
+		url:"/cargogo/menu/getMenusByPid?pid=0",
+					type:"post",
+					dataType:"text",
+					success:function(data, textStatus){
+						data = JSON.parse(data);
+						if(data.status==0) {
+							var menus = data.body.data;
+							var zNodes = eval('('+JSON.stringify(menus)+')');
+							$.fn.zTree.init($("#treeDemo2"), setting, zNodes);
+							$("#loadImg").hide();
+							$("#treeDemo2").show();
+						}
+						if(data.status==401) {
+							top.location.href = '/auth/login';
+						}
+					},
+					error:function(){
+						alert("error");
+					}
+				});
+			}
+			
+			//点击菜单项
+
+			
+			//删除菜单
+			$("#deleteMenus").click(function(){
+				
+				if(!confirm("确定删除选择的菜单项?")){
+					return false;
+				}
+				var ids = "";
+				var treeObj = $.fn.zTree.getZTreeObj("treeDemo2");
+				var nodes = treeObj.getCheckedNodes(true);
+				if(nodes.length==0){
+					return false;
+				}
+				for(var i=0;i<nodes.length;i++){
+					ids+=nodes[i].id+",";
+				}
+				
+				$.ajax({
+					url:"/cargogo/menu/deletess",
+					type:"post",
+					data:{ids:ids,deleteParent:$("#deleteParent").attr("checked")?"1":"-1"},
+					dataType:"text",
+					success:function(data){
+						console.log(data);
+					    data = JSON.parse(data);
+						if(data==1){
+							alert("操作成功！");
+							loadMenusTree();
+						}else{
+							alert("删除菜单失败！");
+						}
+					},
+					error:function(){
+						alert("删除菜单失败！");
+					}
+				});
+			});
+			
+			
+			var expandAllFlg = true;
+			function expandNode(e) {
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo2"),
+				type = e.data.type,
+				nodes = zTree.getSelectedNodes();
+
+				if (type == "expandAll") {
+					zTree.expandAll(true);
+				} else if (type == "collapseAll") {
+					zTree.expandAll(false);
+				} else if (type == "expandOrCollapse") {
+					zTree.expandAll(expandAllFlg);
+					expandAllFlg = !expandAllFlg;
+				} else {
+					if (type.indexOf("All")<0 && nodes.length == 0) {
+						alert("请先选择一个父节点");
+					}
+					var callbackFlag = $("#callbackTrigger").attr("checked");
+					for (var i=0, l=nodes.length; i<l; i++) {
+						zTree.setting.view.fontCss = {};
+						if (type == "expand") {
+							zTree.expandNode(nodes[i], true, null, null, callbackFlag);
+						} else if (type == "collapse") {
+							zTree.expandNode(nodes[i], false, null, null, callbackFlag);
+						} else if (type == "toggle") {
+							zTree.expandNode(nodes[i], null, null, null, callbackFlag);
+						} else if (type == "expandSon") {
+							zTree.expandNode(nodes[i], true, true, null, callbackFlag);
+						} else if (type == "collapseSon") {
+							zTree.expandNode(nodes[i], false, true, null, callbackFlag);
+						}
+					}
+				}
+			}
+			$("#expandOrCollapseAllBtn").bind("click", {type:"expandOrCollapse"}, expandNode);
+		});
+</script>
+   </div>
+</div>
+</body>
+</html>

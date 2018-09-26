@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="/static/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+		<link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+		<!-- Data Tables -->
+		<link href="/static/hplus/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+		<link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+		<link href="/static/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+		<link href="/static/hplus/css/clothes.css" rel="stylesheet">
+		<link href="/static/hplus/css/check.css" rel="stylesheet">
+
+		<script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+		<script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="/static/hplus/js/plugins/jeditable/jquery.jeditable.js"></script>
+		<script src="/static/hplus/js/plugins/dataTables/jquery.dataTables.js"></script>
+		<script src="/static/hplus/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+		<script src="/static/hplus/js/content.min.js?v=1.0.0"></script>
+		<script src="/static/layer/layer.js"></script>
+		<script src="/static/nice-validator/jquery.validator.js?local=zh-CN"></script>
+		<script src="/static/laydate/laydate.js"></script>
+		<script src="/static/custom/tableUtils.js"></script>
+		{% block customHead %} {% endblock %}
+		<title>{% block customTitle %}{% endblock %}</title>
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-tit">
+								{% block customTitle_h5 %}{% endblock %} {% block customTitle_src %} {% endblock %}
+							</div>
+							<div class="ibox-content">
+								{% block content_top %} {% endblock %}
+								<div class="col-sm-12 form-inline">
+									<input type="hidden" name="size" id="pageSize" value="{{pageInfo.size}}">
+									<input type="hidden" name="current" id="pageNum" value="{{pageInfo.current}}">
+									<div class="form-group col-sm-12" style="margin-bottom: 10px; padding-left:0;">
+										{% block search_option %}{% endblock %}
+									</div>
+
+									<div>
+										<input type="hidden" value="{{message}}" id="pMsg">
+										<script>
+											var message = $('#pMsg').val();
+											console.log('message', message);
+											if(message != null && message != undefined && message != '') {
+												if(message == 'success') {
+													layer.msg('操作成功');
+												}
+												if(message == 'fail') {
+													layer.msg('操作失败');
+												}
+											}
+										</script>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="ibox-tools">
+											{% block search_bt %}
+											<a href="toAdd" class="btn btn-primary btn-sm">
+												<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</a>
+											<a onclick="submitSearch()" class="btn btn-primary btn-sm">
+												<span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询</a>
+											<button method="deletes" onclick="return submitDeleteIDs(this,'确定要删除选择的记录?');" class="btn btn-danger btn-sm">
+												<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</button> {% endblock %}
+										</div>
+										{% block carpar %} {% endblock %}
+									</div>
+								</div>
+								{% block carlist %} {% endblock %} {% block appointnum %} {% endblock %} {% block customCode %} {% endblock %}
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+		{% block shawbox %} {% endblock %}
+	</body>
+
+</html>

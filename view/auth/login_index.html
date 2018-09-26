@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="cn">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>通用后台管理系统 | 登录</title>
+    <link href="/static/hplus/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/style.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/login.min.css" rel="stylesheet">
+    <script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+    <script src="//captcha.luosimao.com/static/dist/api.js"></script>
+    <script>
+        if (window.top !== window.self) { window.top.location = window.location };
+    </script>
+    <style>
+        .error {
+            color: #F00;
+            font-size: 10px;
+        }
+
+        .text {
+            color: #333;
+        }
+    </style>
+
+
+</head>
+
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>{{appName}}</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4>欢迎使用
+                        <strong>{{appName}}后台管理系统</strong>
+                    </h4>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <form method="post" enctype="multipart/form-data">
+                    <h4 class="no-margins">登录：</h4>
+                    <p class="m-t-md">登录到{{appName}}后台管理系统</p>
+                    <div class="form-group">
+                        <input type="text" class="form-control uname" placeholder="用户名" id="username" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control pword m-b" placeholder="密码" id="password" />
+                    </div>
+                    <!-- 人机验证 -->
+                    <div class="l-captcha" data-site-key="1ec1d6fb739c611df814267e0742b839" data-callback="getResponse"></div>
+                    <div class="form-group" style="padding-top: 5px;">
+                        <label class="error" style="display: none" id="uError"></label>
+                    </div>
+                    <a class="btn btn-success btn-block" onclick="doLogin()">登录</a>
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                &copy; 2018 All Rights Reserved. {{appName}}
+            </div>
+        </div>
+        <input type="hidden" value="{{logcompany}}" id="logcompany" />
+        <input type="hidden" value="{{logauth}}" id="logauth" />
+    </div>
+    <script>
+        var valiStatus = false;
+        $(function () {
+            logAdmin();
+            changeImage();
+        });
+
+        function logAdmin() {
+            console.log($('#logcompany').val());
+            console.log('%c '+$('#logauth').val(),'color:#007ACC');
+        }
+
+        function changeImage() {
+            $.ajax({
+                url: "/auth/login/authImage",
+                type: "get",
+                dataType: "text",
+                success: function (data) {
+                    $('#authImg').html(data);
+                },
+                error: function () {
+                }
+            });
+        };
+
+        //人机验证回调
+        function getResponse(resp) {
+            valiStatus = true;
+        }
+
+        function doLogin() {
+            if (valiStatus) {
+                $('#uError').hide();
+                console.log("2222")
+                var username = $('#username').val();
+                var password = $('#password').val();
+                // var validCode = $('#validCode').val();
+                if (username == null || username == '' || username == undefined) {
+                    $('#uError').show().text("账号不能为空");
+                    return;
+                }
+                if (password == null || password == '' || password == undefined) {
+                    $('#uError').show().text("密码不能为空");
+                    return;
+                }
+                $.ajax({
+                    url: "/auth/login/doLogin",
+                    type: "post",
+                    dataType: "text",
+                    data: { username: username, password: password },
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        if (data.status == '0') {
+                            console.log('登录成功');
+                            window.location.href = '/cargogo/home';
+                        } else if (data.status == '1') {
+                            console.log('已登录用户');
+                            window.location.href = '/cargogo/home';
+                        } else if (data.status == '-7') {
+                            $('#uError').show().text(data.msg);
+                        } else if (data.status == '-2') {
+                            $('#uError').show().text(data.msg);
+                        } else {
+                            alert('服务器出错');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            } else {
+                // layer.msg('人机验证不通过');
+                $('#uError').show().text("人机验证不通过");
+            }
+        }
+    </script>
+</body>
+
+</html>

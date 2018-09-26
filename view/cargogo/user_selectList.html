@@ -1,0 +1,125 @@
+{% extends "../cargogo/base_list.html" %} 
+{% block customTitle %}用户信息{% endblock %} 
+{% block customTitle_h5 %}用户信息{% endblock%} 
+{% block search_option %}
+<div class="input-group" style="margin-bottom: 10px">
+    <span class="input-group-addon">姓名:</span>
+    <input type="text" name="realName" class="form-control" value="{{querymodel.realName}}">
+</div>
+<div class="input-group" style="margin-bottom: 10px">
+    <span class="input-group-addon">手机号:</span>
+    <input type="text" name="phone" class="form-control"  value="{{querymodel.phone}}">
+</div>
+
+
+                    
+{% endblock %} 
+{% block search_bt %}
+<a onclick="submitSearch()" class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询</a>
+    
+{% endblock %} 
+{% block table_th %}
+<th>编号</th>
+<th>姓名</th>
+<th>创建时间</th>
+<th>手机号</th>
+<th>身份证号</th>
+<th>操作</th>
+{% endblock %} 
+{% block table_body %} 
+{% for item in pageInfo.records %}
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" name="ids" value="{{item.uid}}" />
+    </td>
+    <td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+    <td>{{item.realName}}</td>
+    <td>{{item.createTime}}</td>
+    <td>{{item.phone}}</td>
+    <td>{{item.idCard}}</td>
+    <td>
+    	{% if Btn['cargogo/user/addOrUpdata'] %}
+        <a onclick="addOrUpdata({{item.uid}})"  class="btn btn-primary btn-xs">查看详情</a>
+        {% endif %}
+        {% if Btn['cargogo/user/updata'] %}
+        {% if item.status == 0 or item.status==1%}
+        <a href="javascript:;" onclick="freezeUser('{{item.name}}','{{item.mobilePhone}}',{{item.uid}})" class="btn btn-danger btn-xs">冻结</a>
+        {% else %}
+        <a href="javascript:;"  onclick="unFreezeUser('{{item.name}}','{{item.mobilePhone}}',{{item.uid}})" class="btn btn-primary btn-xs">解冻</a>
+        {% endif %}
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+ {% endblock %} 
+ {% block customCode %}
+<script>
+function addOrUpdata(id) {
+        layer.open({
+            type: 2,
+            title: '查看详情资料',
+            shadeClose: true,
+            shade: 0.5,
+            area: ['90%', '90%'],
+            content: '/cargogo/user/addOrUpdata?id='+id //iframe的url
+        })
+    }
+
+  //冻结
+function freezeUser(name,phone,id) {
+    layer.confirm('是否冻结用户？', {
+        title:'冻结用户',btn: ['确认','取消'] //按钮
+    }, function(){
+        $.ajax({
+            type:'POST',
+            url: "updata",
+            data: {
+                uid:id,
+                status :-1},
+            async:true,
+            success:function(data){
+                var result = data;
+                console.log(result);
+                if(result.status=="0") {
+                    layer.msg('操作成功!');
+                    window.setTimeout("refreshPage()",2000);
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }
+        });
+    }, function(){
+
+    });
+}
+
+//解冻
+function unFreezeUser(name,phone,id) {
+    layer.confirm('是否解冻该用户？', {
+        title:'解冻用户',btn: ['确认','取消'] //按钮
+    }, function(){
+        $.ajax({
+            type:'POST',
+            url: "updata",
+            data: {
+                uid:id,
+                status :1},
+            async:true,
+            success:function(data){
+                var result = data;
+                console.log(result);
+                if(result.status=="0") {
+                    layer.msg('操作成功!');
+                    window.setTimeout("refreshPage()",2000);
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }
+        });
+    }, function(){
+
+    });
+}
+</script>
+ {% endblock %}

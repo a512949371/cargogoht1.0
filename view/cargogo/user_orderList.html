@@ -1,0 +1,66 @@
+{% extends "../cargogo/base_list.html" %} 
+{% block form_top %} 
+{% endblock %} 
+{% block content_top %}
+<div class="panel-heading">
+    <div class="panel-options">
+        <input type="hidden" id="pageStatus"  value="{{pageStatus}}" name="pageStatus">
+        <ul class="nav nav-tabs">
+            <li class="{{'active' if pageStatus==null else ''}}">
+                <a href="addOrUpdata?id={{id}}">基本资料</a>
+            </li>
+            <li class="{{'active' if pageStatus==1 else ''}}">
+                <a href="orderList?pageStatus=1&id={{id}}">订单记录</a>
+            </li>
+        </ul>
+    </div>
+</div>      
+{% endblock %}
+{% block search_option %}
+{% endblock %} 
+{% block search_bt %}
+
+{% endblock %} 
+{% block table_th %}
+<th>编号</th>
+<th>订单编号</th>
+<th>购买车辆</th>
+<th>价格</th>
+<th>数量</th>
+<th>落户方式</th>
+<th>购买时间</th>
+<th>车辆识别代号</th>
+<th>车辆手续是否齐全</th>
+<th>车牌号</th>
+{% endblock %} 
+{% block table_body %} 
+<input type='hidden' id="accountId" name='accountId' value="{{id}}"/>
+{% for item in pageInfo.records %}
+
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" name="ids" value="{{item.id}}" />
+    </td>
+    <td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+    <td>{{item.orderNo}}</td>
+    <td>{{item.fullName}}</td>
+    <td>{{item.unitPrice}}</td>
+    <td>{{item.number}}</td>
+    <td>{{item.settleName}}</td>
+    <td>{{item.createTime}}</td>
+    <td>{{item.carCode}}</td>
+    <td>{% if item.isFormality == 1 %}齐全{% else %}不齐全{% endif %}</td>
+    <td>{{item.licensePlate}}</td>
+    
+</tr>
+{% endfor %}
+{% endblock %} 
+{% block customCode %}
+<script>
+$(function () {
+        $('#form0').attr('action', 'orderList?pageStatus=1&id={{id}}');
+    });
+</script>
+ {% endblock %}
+ {% block out_body %}
+{% endblock %}

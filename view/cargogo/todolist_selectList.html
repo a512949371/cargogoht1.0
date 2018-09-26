@@ -1,0 +1,92 @@
+{% extends "../cargogo/base_list.html" %}
+{% block customTitle %}待办事项{% endblock %}
+{% block customTitle_h5 %}待办事项{% endblock%}
+{% block search_option %}
+<div class="input-group" style="margin-bottom: 10px">
+    <span class="input-group-addon">姓名:</span>
+    <input type="text" name="realName" class="form-control" value="{{querymodel.realName}}">
+</div>
+<div class="input-group" style="margin-bottom: 10px">
+    <span class="input-group-addon">手机号:</span>
+    <input type="text" name="phone" class="form-control" value="{{querymodel.phone}}">
+</div>
+{% endblock %}
+{% block search_bt %}
+<a onclick="submitSearch()" class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询</a>
+{% endblock %}
+{% block table_th %}
+<th>编号</th>
+<th>订单编号</th>
+<th>姓名</th>
+<th>电话号码</th>
+<th>事项内容</th>
+<th>开始时间</th>
+<th>完成时间</th>
+<th>操作</th>
+{% endblock %}
+{% block table_body %}
+{% for item in pageInfo.records %}
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" name="ids" value="{{item.id}}" />
+    </td>
+    <td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+    <td>{{item.orderNo}}</td>
+    <td>{{item.realName}}</td>
+    <td>{{item.phone}}</td>
+    <td>汽车落户</td>
+    <td>{{item.createTime}}</td>
+    <td>{{item.bringTime}}</td>
+    <td>
+        {% if item.status==1 %}
+        <a onclick="designated({{item.id}})" class="btn btn-primary btn-xs">查看</a>
+        {% else %}
+        <a onclick="designated({{item.id}})" class="btn btn-primary btn-xs">指定承办人</a>
+        <a onclick="todolistfinish({{item.id}})" class="btn btn-primary btn-xs">事项完成</a>
+        {% endif %}
+
+    </td>
+</tr>
+{% endfor %} {% endblock %} {% block customCode %}
+<script>
+
+    function designated(id) {
+        layer.open({
+            type: 2,
+            title: '指派',
+            shadeClose: true,
+            shade: 0.5,
+            area: ['70%', '90%'],
+            content: '/cargogo/todolist/designated?id=' + id //iframe的url
+        })
+    }
+
+    function todolistfinish(id) {
+        layer.confirm('确定事项结束？', {
+            title: '事项结束', btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'POST',
+                url: "todolistfinish",
+                data: {
+                    orderId: id,
+                },
+                async: true,
+                success: function (data) {
+                    var result = data;
+                    console.log(result);
+                    if (result.status == "0") {
+                        layer.msg('操作成功!');
+                        window.setTimeout("refreshPage()", 2000);
+                    } else {
+                        layer.msg(result.msg);
+                    }
+                }
+            });
+        }, function () {
+
+        });
+    }
+</script>
+{% endblock %}

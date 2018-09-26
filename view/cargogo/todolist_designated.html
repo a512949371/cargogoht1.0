@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>征信流水</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/static/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <!-- Morris -->
+    <link href="/static/hplus/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <!-- Gritter -->
+    <link href="/static/hplus/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <!-- 全局js -->
+    <script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <!-- Flot -->
+    <script src="/static/hplus/js/plugins/flot/jquery.flot.js"></script>
+    <script src="/static/hplus/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="/static/hplus/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="/static/hplus/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="/static/hplus/js/plugins/flot/jquery.flot.pie.js"></script>
+    <!-- Peity -->
+    <script src="/static/hplus/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="/static/hplus/js/demo/peity-demo.js"></script>
+    <!-- 自定义js -->
+    <script src="/static/hplus/js/content.js?v=1.0.0"></script>
+    <!-- jQuery UI -->
+    <script src="/static/hplus/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- GITTER -->
+    <script src="/static/hplus/js/plugins/gritter/jquery.gritter.min.js"></script>
+    <!-- EayPIE -->
+    <script src="/static/hplus/js/plugins/easypiechart/jquery.easypiechart.js"></script>
+    <!-- Sparkline -->
+    <script src="/static/hplus/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!-- Sparkline demo data  -->
+    <script src="/static/hplus/js/demo/sparkline-demo.js"></script>
+    <script src="/static/layer/layer.js"></script>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+
+                <div class="ibox-content timeline">
+                    {% for item in pageInfo %}
+                    <div class="timeline-item">
+                        <div class="row">
+                            <div class="col-xs-3 date ui-sortable">
+                                <p class="btn {% if item.status==0 %} btn-default {% else %} btn-info {% endif %} m-r-sm">{{loop.index}}</p>
+                                <br>
+                            </div>
+                            <div class="col-xs-7 content  ui-sortable">
+                                <p class="m-b-xs"><strong>{% if item.status==0 %}待进行{% elseif item.status==1 %}进行中{%
+                                        else %}已完成{% endif %}</strong></p>
+                                <p>{{item.itemName}}</p>
+                                {% if item.status==0 %}
+                                <a id="a{{item.id}}" {% if item.designated==1 or item.designated==2 %} onclick="designated({{id}},{{item.id}},{{item.assignType}})"
+                                    {% endif %} class="btn {% if item.designated==1 or item.designated==2 %}btn-info  {% else %} btn-default {% endif %} m-r-sm">{%
+                                    if loop.index==5 %}结束{% else %}指定{% endif %}</a>
+                                {% else %}
+                                <p>承办人：{{item.emName}}</p>
+                                <p>{{item.createTime}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <script>
+            function designated(orderId, id, assignType) {
+                if (assignType == 4) {
+                    layer.confirm('确定结束？', {
+                        title: '提示', btn: ['确认', '取消'] //按钮
+                    }, function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: "designatedUser",
+                            data: {
+                                id: id,
+                                orderId: orderId,
+                                status: 1,
+                                emId: '',
+                                emName: '',
+                                assignType: assignType
+                            },
+                            async: true,
+                            success: function (data) {
+                                var result = data;
+                                console.log(result);
+                                if (result.status == "0") {
+                                    layer.msg('操作成功');
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    setTimeout(function () {
+                                        window.location.reload()
+                                    }, 1000);
+                                } else {
+                                    layer.msg('操作失败!');
+                                }
+                            }
+                        });
+                    }, function () {
+
+                    });
+                } else {
+                    layer.open({
+                        type: 2,
+                        title: '指派',
+                        shadeClose: true,
+                        shade: 0.5,
+                        area: ['70%', '90%'],
+                        content: '/cargogo/todolist/userList?orderId=' + orderId + '&id=' + id + '&assignType=' + assignType //iframe的url
+                    })
+                }
+
+            }
+
+        </script>
+
+</body>
+
+</html>

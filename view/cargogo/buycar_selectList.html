@@ -1,0 +1,145 @@
+{% extends "../cargogo/base_list.html" %} {% block customTitle %}购车列表{% endblock %} {% block customTitle_h5 %}购车列表{% endblock%}
+{% block search_option %}
+<div class="input-group" style="margin-bottom: 10px">
+    <span class="input-group-addon">姓名:</span>
+    <input type="text" name="realName" class="form-control" value="{{querymodel.realName}}">
+</div>
+<div class="input-group" style="margin-bottom: 10px">
+    <span class="input-group-addon">手机号:</span>
+    <input type="text" name="phone" class="form-control" value="{{querymodel.phone}}">
+</div>
+
+{% endblock %} {% block search_bt %}
+<a onclick="submitSearch()" class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询</a>
+
+{% endblock %} {% block table_th %}
+<th>编号</th>
+<th>订单编号</th>
+<th>姓名</th>
+<th>电话</th>
+<th>车辆总价（万）</th>
+<th>购车时间</th>
+<th>提车时间</th>
+<th>操作</th>
+{% endblock %} {% block table_body %} {% for item in pageInfo.records %}
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" name="ids" value="{{item.id}}" />
+    </td>
+    <td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+    <td>{{item.orderNo}}</td>
+    <td>{{item.realName}}</td>
+    <td>{{item.phone}}</td>
+    <td>{{item.totalPrice}}</td>
+    <td>{{item.createTime}}</td>
+    <td>{{item.bringTime}}</td>
+    <td>
+        {% if item.status==-1 %}
+        已取消
+        {% elseif item.status==1%} 
+        已提车
+        {% else %}
+        <a onclick="selectOne({{item.id}})" class="btn btn-primary btn-xs">查看</a>
+        <a {% if item.auditStatus==0 %} onclick="pretrial({{item.id}})" {% endif %} class="btn {% if item.auditStatus==0 %} btn-primary {% else %} btn-default  {% endif %} btn-xs">预审</a>
+        <a {% if item.auditStatus==1 %}  onclick="uploadImg({{item.id}})" {% endif %} class="btn {% if item.auditStatus==1 %} btn-primary {% else %} btn-default  {% endif %}  btn-xs">扫描上传</a>
+        <a {% if item.auditStatus==1 %}  onclick="review({{item.id}})" {% endif %} class="btn {% if item.auditStatus==1 %} btn-primary {% else %} btn-default  {% endif %}  btn-xs">复审</a>
+        <a onclick="cancelOrder({{item.id}})" class="btn  btn-primary  btn-xs">取消订单</a>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %} {% endblock %} {% block customCode %}
+<script>
+
+    function selectOne(id) {
+        console.log('selectOne', id);
+        layer.open({
+            type: 2,
+            title: '查看资料',
+            shadeClose: true,
+            shade: 0.5,
+            area: ['90%', '90%'],
+            content: '/cargogo/buycar/selectOne?id=' + id //iframe的url
+        })
+    }
+
+    function uploadImg(id){
+        layer.open({
+            type: 2,
+            title: '征信流水',
+            shadeClose: true,
+            shade: 0.5,
+            area: ['70%', '90%'],
+            content: '/cargogo/buycar/getTrueFaith?id=' + id //iframe的url
+        })
+    }
+
+    function pretrial(id) {
+        layer.confirm('是否通过初审？', {
+            title: '预审审核', btn: ['通过', '拒绝'] //按钮
+        }, function () {
+            orderAudit(id, 1);
+        }, function () {
+            orderAudit(id, -1);
+        });
+
+    }
+
+    function orderAudit(id, auditStatus) {
+        $.ajax({
+            type: 'POST',
+            url: "orderAudit",
+            data: {
+                id: id,
+                auditStatus: auditStatus
+            },
+            async: true,
+            success: function (data) {
+                var result = data;
+                console.log(result);
+                if (result.status == "0") {
+                    layer.msg('操作成功!');
+                    window.setTimeout("refreshPage()", 2000);
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }
+        });
+    }
+
+    function review(id) {
+        layer.confirm('是否通过复审？', {
+            title: '复审审核', btn: ['通过', '拒绝'] //按钮
+        }, function () {
+            orderAudit(id, 2);
+        }, function () {
+            orderAudit(id, -2);
+        });
+    }
+
+    function cancelOrder(id) {
+        layer.confirm('是否取消订单？', {
+            title: '取消订单', btn: ['确认', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'POST',
+                url: "cancelOrder",
+                data: { id: id },
+                async: true,
+                success: function (data) {
+                    var result = data;
+                    console.log(result);
+                    if (result.status == "0") {
+                        layer.msg('操作成功!');
+                        window.setTimeout("refreshPage()", 2000);
+                    } else {
+                        layer.msg('操作失败!');
+                    }
+                }
+            });
+        }, function () {
+
+        });
+    }
+
+</script> {% endblock %}

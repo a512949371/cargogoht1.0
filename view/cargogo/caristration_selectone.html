@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="/static/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+		<link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+		<!-- Data Tables -->
+		<link href="/static/hplus/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+		<link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+		<link href="/static/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+		<link href="/static/hplus/css/clothes.css" rel="stylesheet">
+		<link href="/static/hplus/css/check.css" rel="stylesheet">
+
+		<script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+		<script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="/static/hplus/js/plugins/jeditable/jquery.jeditable.js"></script>
+		<script src="/static/hplus/js/plugins/dataTables/jquery.dataTables.js"></script>
+		<script src="/static/hplus/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+		<script src="/static/hplus/js/content.min.js?v=1.0.0"></script>
+		<script src="/static/layer/layer.js"></script>
+		<script src="/static/nice-validator/jquery.validator.js?local=zh-CN"></script>
+		<script src="/static/laydate/laydate.js"></script>
+		<script src="/static/custom/tableUtils.js"></script>
+		{% block customHead %} {% endblock %}
+		<title>{% block customTitle %}{% endblock %}</title>
+	</head>
+
+	<body class="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<form method="post" enctype="multipart/form-data" action="selectone" id="form0">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="ibox float-e-margins">
+							<div class="ibox-tit">
+								{% block customTitle_h5 %}{% endblock %} {% block customTitle_src %} {% endblock %}
+							</div>
+							<div class="ibox-content">
+								{% block content_top %} {% endblock %}
+								<div class="col-sm-12 form-inline">
+									<input type="hidden" name="size" id="pageSize" value="{{pageInfo.size}}">
+									<input type="hidden" name="current" id="pageNum" value="{{pageInfo.current}}">
+									<div class="form-group col-sm-12" style="margin-bottom: 10px; padding-left:0;">
+										{% block search_option %}{% endblock %}
+									</div>
+
+									<div>
+										<input type="hidden" value="{{message}}" id="pMsg">
+										<script>
+											var message = $('#pMsg').val();
+											console.log('message', message);
+											if(message != null && message != undefined && message != '') {
+												if(message == 'success') {
+													layer.msg('操作成功');
+												}
+												if(message == 'fail') {
+													layer.msg('操作失败');
+												}
+											}
+										</script>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="ibox-tools">
+											{% block search_bt %} {% endblock %}
+										</div>
+										{% block carpar %} {% endblock %}
+									</div>
+								</div>
+								{% block carlist %}
+								<input type="hidden" id="Vehicleid" name="vehicleId" value="{{queryModel.vehicleId}}" />
+								<table class="table  table-bordered ">
+									<thead>
+										<tr>
+											<th width="20">
+												<input type="checkbox" id="firstCheckbox" />
+											</th>
+											<th>编号</th>
+											<th>品牌</th>
+											<th>车辆型号</th>
+											<th>车辆识别代号</th>
+											<th>车辆手续</th>
+											<th>车辆所在地</th>
+											<th>车辆状态</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% block table_body %} {% for item in pageInfo.records %}
+										<tr class="gradeX">
+											<td><input type="checkbox" name="ids" value="{{item.id}}" /></td>
+											<td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+											<td>{{item.brandNmae}}</td>
+											<td>{{item.model}}</td>
+											<td><input class="carcode" value="{{item.carCode}}" placeholder="请输入车辆识别代号" /></td>
+											<td>
+
+												<div class="flex-box">
+													<input class="switch-change switch-anim isformality" value="{{item.isFormality}}" onchange="checkNum($(this))" type="checkbox" {% if item.isFormality=='1' %} checked {% else %} {% endif %}>
+													<div class="isFormality ml">{% if item.isFormality=='1' %} 齐全 {% else %} 不齐全{% endif %}</div>
+												</div>
+											</td>
+											<td><input class="carlocation" value="{{item.carLocation}}" placeholder="请输入车辆所在地" />
+
+											</td>
+											<td>{% if item.buyStatus ==0 %}未售卖{% else %}已售卖{% endif %}</td>
+											<td>
+												<a href="javascript:;" class="btn btn-primary btn-xs" onclick="Update('{{item.id}}','{{item.vehicleId}}','{{loop.index}}')">保存</a>
+											</td>
+										</tr>
+										{% endfor %} {% endblock %}
+									</tbody>
+								</table>
+								{% endblock %}
+								<div class="row">
+									<input type="hidden" id="pages" value="{{pageInfo.pages}}">
+									<input type="hidden" id="isFirstPage" value="{{pageInfo.isFirstPage}}">
+									<input type="hidden" id="isLastPage" value="{{pageInfo.isLastPage}}">
+									<div class="col-sm-6">
+										<div class="dataTables_info" id="table_info">
+											共
+											<span id="pageTotal">{{pageInfo.total}}</span> 项 每页
+											<select id="pageSizes" class="input-sm" onchange="javascript:changeItem(this)">
+												<option value="10" {% if pageInfo.pageSize==10 %}selected="selected" {% endif %}>10</option>
+												<option value="25" {% if pageInfo.pageSize==25 %}selected="selected" {% endif %}>25</option>
+												<option value="50" {% if pageInfo.pageSize==50 %}selected="selected" {% endif %}>50</option>
+												<option value="100" {% if pageInfo.pageSize==100 %}selected="selected" {% endif %}>100</option>
+											</select> 条记录
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="dataTables_paginate paging_simple_numbers" id="table_numbers">
+											<ul class="pagination">
+												{% if pageInfo.current>1 %}
+												<li class="paginate_button previous disabled" id="pageFirst">
+													<a onclick="changepage(1,$(this))">上一页</a>
+												</li>
+												{% endif %}
+												<li class="paginate_button previous disabled" id="pageFirst">
+													<a>当前第{{pageInfo.current}}页</a>
+												</li>
+												{% if pageInfo.pages > pageInfo.current %}
+												<li class="paginate_button next" id="pageLast">
+													<a onclick="changepage(2,$(this))">下一页</a>
+												</li>
+												{% endif %}
+												<li class="appointnum-box">
+													<div class="other">跳至</div>
+													<input value="" id="Appointnum" onchange="Changenum($(this))" />
+													<div class="other" style="padding: 0;">页</div>
+												</li>
+												<li class="appointnum-box">
+												<div class="other">共{{pageInfo.pages}}页</div>
+											</li>
+											</ul>
+										</div>
+									</div>
+									<script>
+										var ceshidata = [];
+										$(function() {
+											var total = $('#pageTotal').text();
+											var isFirstPage = $('#isFirstPage').val();
+											var isLastPage = $('#isLastPage').val();
+											var pages = $('#pages').val();
+											if(isFirstPage != "true") {
+												$('#pageFirst').attr('class', 'paginate_button previous');
+											}
+											if(isLastPage == "true") {
+												$('#pageLast').attr('class', 'paginate_button next disabled');
+											}
+											//绑定表头id checkbox点击事件
+											$("#firstCheckbox").on("click", function() {
+												console.log("check=" + $(this).prop("checked"));
+												var checkdata = $("input[name=ids]");
+												if($(this).prop("checked")) {
+													$("input[type=checkbox]:enabled").prop("checked", true);
+													for(var i = 0; i < checkdata.length; i++) {
+														ceshidata.push(checkdata.eq(i).val());
+													}
+												} else {
+													$("input[type=checkbox]:enabled").prop("checked", false);
+													ceshidata = [];
+												}
+											});
+										});
+
+										//分页
+										function submitForm(obj) {
+											var pageNo = obj.innerText;
+											var offset = document.getElementById("pageNum");
+											offset.value = pageNo;
+											document.forms[0].submit();
+										}
+										//改变每页显示条数
+										function changeItem(obj) {
+											var pageSize = document.getElementById("pageSize");
+											pageSize.value = obj.value;
+											document.forms[0].submit();
+										}
+										//上一页/下一页
+										function changepage(type, event) {
+											//type=1为上一页,2为下一页
+											let isFirstPage = $('#isFirstPage').val();
+											let isLastPage = $('#isLastPage').val();
+											var offset = document.getElementById("pageNum");
+											var pageNo = offset.value;
+											if(type == 1) {
+												if($("#pageNum").val() <= 1) {
+													return
+												} else {
+													offset.value = Number(pageNo) - 1;
+													console.log(offset.value);
+												}
+
+											};
+											if(type == 2) {
+												console.log($("#pages").val(), $("#pageNum").val(), Number($("#pages").val()) <= Number($("#pageNum").val()))
+												if(Number($("#pages").val()) <= Number($("#pageNum").val())) {
+
+													return
+												} else {
+													console.log(pageNo);
+													offset.value = Number(pageNo) + 1;
+													console.log(offset.value);
+												}
+											};
+											document.forms[0].submit();
+										}
+									</script>
+								</div>
+								{% block customCode %}
+								<script>
+									function Closealert() {
+										var index = parent.layer.getFrameIndex(window.name);
+										parent.layer.close(index);
+									}
+
+									function Update(id, vehicleId, index) {
+										var data = {
+											id: id,
+											vehicleId: vehicleId,
+											carCode: $(".carcode").eq(index - 1).val(),
+											isFormality: $(".isformality").eq(index - 1).val(),
+											carLocation: $(".carlocation").eq(index - 1).val(),
+										}
+										console.log(data)
+										$.ajax({
+											type: "post",
+											url: "/cargogo/caristration/updatacarinfo",
+											data: data,
+											async: true,
+											success: function(res) {
+												if(res.status == 0) {
+													layer.msg(res.body.msg)
+												} else {
+													layer.msg(res.msg)
+												}
+											setTimeout(function(){
+												window.location.reload()
+											},1000)
+											}
+										});
+									}
+
+									function Changenum(obj) {
+										console.log(obj.val());
+										$("#pageNum").val(obj.val());
+										document.forms[0].submit();
+									}
+
+									function checkNum(obj) {
+										if(obj.prop('checked')) {
+											console.log("选中");
+											obj.val("1");
+											obj.siblings(".isFormality").text("齐全")
+										} else {
+											console.log("没选中");
+											obj.val("0");
+											obj.siblings(".isFormality").text("不齐全")
+										}
+									}
+								</script>
+								{% endblock %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+
+</html>

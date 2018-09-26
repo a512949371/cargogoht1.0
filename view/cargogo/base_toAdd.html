@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/static/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <!-- Data Tables -->
+    <link href="/static/hplus/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="/static/select2/css/select2.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/clothes.css" rel="stylesheet">
+    <link href="/static/hplus/css/check.css" rel="stylesheet">
+    
+    <script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/static/hplus/js/plugins/jeditable/jquery.jeditable.js"></script>
+    <script src="/static/hplus/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/static/hplus/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="/static/hplus/js/content.min.js?v=1.0.0"></script>
+    <script src="/static/layer/layer.js"></script>
+    <script src="/static/nice-validator/jquery.validator.js?local=zh-CN"></script>
+    <script src="/static/nice-validator/jquery.validator.js"></script>
+    <script src="/static/laydate/laydate.js"></script>
+    <script src="/static/custom/tableUtils.js"></script>
+    <script src="/static/select2/select2.min.js"></script>
+    {% block customHead %}
+	{% endblock %}
+	<title>{% block customTitle %}{% endblock %}</title>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block form_top %}
+    <div class="ibox-title">
+        <h5 id="pagedes">详细信息</h5>
+        <div class="ibox-tools">
+            <a href="selectList">返回上一层</a>
+        </div>
+    </div>
+    {% endblock %}
+    
+    <div class="ibox-content">
+    {% block content_top %}
+            
+        {% endblock %}
+        <form class="form-horizontal" action="insert" enctype="multipart/form-data" method="post" id="form1">
+            <input type="hidden" value="{{e.id}}" id="eid" name="id">
+            {% block form %}
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">商家名称：</label>
+                    <div class="col-sm-7">
+                        <input type="text" name="storeName" data-th-maxlength="20" class="form-control"
+                               data-rule="商家名称:required:storeName;" th:value="${e.storeName}">
+                    </div>
+                </div>
+            {% endblock %}
+            {% block form_submit %}
+            <div class="form-group">
+                <button type="button" style="margin-left:50%" class="btn btn-primary btn-sm" id="saveRoleBtn"
+                        onclick="checkEmpty()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>保存
+                </button>
+            </div>
+            {% endblock %}
+        </form>
+        {% block form_scr %}
+        <script>
+            $(function () {
+                var id = document.getElementById("eid");
+                var eid = id.value;
+                if (eid != null && eid != undefined && eid != '') {
+                    $('#form1').attr('action', 'update');
+                    $('#pagedes').html("编辑");
+                    document.title = '编辑';
+                }
+            });
+
+            function checkEmpty() {
+            $("#saveRoleBtn").attr("disabled", true);
+                if ($("#form1").isValid()) {
+                    $("#form1").submit();
+                } else {
+                    $("#saveRoleBtn").removeAttr("disabled");
+                }
+            };
+        </script>
+        {% endblock %}
+        {% block addorupdata_custom %}
+        {% endblock %}
+        {% block form_custom %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+{% block out_body %}
+{% endblock %}
+</html>

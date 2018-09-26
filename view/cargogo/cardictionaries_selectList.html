@@ -1,0 +1,125 @@
+{% extends "../cargogo/base_list.html" %} {% block customTitle %}用户信息{% endblock %} {% block customTitle_h5 %}用户信息{% endblock%} {% block search_option %}
+<div class="input-group" style="margin-bottom: 10px">
+	<span class="input-group-addon">车辆品牌:</span>
+	<input type="text" name="brandName" class="form-control" value="{{queryModel.brandName}}" placeholder="请输入品牌型号">
+</div>
+<div class="input-group" style="margin-bottom: 10px">
+	<span class="input-group-addon">车辆名称:</span>
+	<input type="text" name="fullName" class="form-control" value="{{queryModel.fullName}}" placeholder="请输入车辆名称">
+</div>
+{% endblock %} {% block search_bt %}
+<a onclick="submitSearch()" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>搜索</a>
+	{% if Btn['cargogo/cardictionaries/addone'] %}
+<a onclick="Opencardictionarie()" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</a>
+	{% endif %}
+<a onclick="Reload()" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>刷新</a>
+	{% if Btn['cargogo/cardictionaries/deletediccar'] %}
+<a onclick="Deletecar('0','')" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>删除所选</a>
+	{% endif %}
+{% endblock %} {% block table_th %}
+<th>编号</th>
+<th>品牌</th>
+<th>型号</th>
+<th>车辆名称</th>
+<th>操作</th>
+{% endblock %} {% block table_body %} {% for item in pageInfo.records %}
+<tr class="gradeX">
+	<td>
+		<input type="checkbox" onchange="Choice($(this))" name="ids" value="{{item.id}}" />
+	</td>
+	<td>{{pageInfo.size*(pageInfo.current-1)+loop.index}}</td>
+	<td>{{item.brandName}}</td>
+	<td>{{item.model}}</td>
+	<td>{{item.fullName}}</td>
+	<td>
+		{% if Btn['cargogo/cardictionaries/selectone'] %}
+		<a href="javascript:;" class="btn btn-warning btn-xs" onclick="Editcar('{{item.id}}')">编辑</a>
+		{% endif %}
+		{% if Btn['cargogo/cardictionaries/deletediccar'] %}
+		<a href="javascript:;" class="btn btn-danger btn-xs" onclick="Deletecar('1','{{item.id}}')">删除</a>
+		{% endif %}
+	</td>
+</tr>
+{% endfor %}
+<script>
+	function Reload() {
+		window.location.reload()
+	}
+
+	function Editcar(id) {
+		layer.open({
+			type: 2,
+			title: '编辑',
+			shadeClose: true,
+			shade: 0.5,
+			area: ['70%', '90%'],
+			content: '/cargogo/cardictionaries/selectone?id=' + id //iframe的url
+		})
+	}
+
+	function Opencardictionarie() {
+		layer.open({
+			type: 2,
+			title: '新增',
+			shadeClose: true,
+			shade: 0.5,
+			area: ['70%', '90%'],
+			content: '/cargogo/cardictionaries/addone' //iframe的url
+		})
+	}
+
+	function Deletecar(num, id) {
+		if(num == 0) {
+			if(ceshidata.length == 0) {
+				layer.msg("请先选中需要删除的车辆");
+				return;
+			}
+		} else {
+			ceshidata = [id]
+		}
+		layer.open({
+			title: "提示",
+			content: '确定删除所选车辆?',
+			btn: ['确定', '取消'], //可以无限个按钮
+			yes: function(index, layero) {
+				$.ajax({
+					type: "post",
+					url: "/cargogo/cardictionaries/deletediccar",
+					contentType: 'application/json;charset=utf-8',
+					async: true,
+					dataType: "json",
+					data: JSON.stringify({
+						ids: ceshidata
+					}),
+					success: function(res) {
+						console.log("res", res)
+						if(res.status == 0) {
+							layer.msg(res.body.msg);
+						} else {
+							layer.msg(res.msg)
+						}
+						setTimeout(function() {
+							window.location.reload()
+						}, 1000)
+					}
+				});
+			}
+		})
+		console.log(ceshidata)
+	}
+	//选中或取消选中该车辆
+	function Choice(obj) {
+		var checkdata = $("input[name=ids]");
+		ceshidata = []
+		for(var i = 0; i < checkdata.length; i++) {
+			if(checkdata.eq(i).prop("checked")) {
+				ceshidata.push("" + checkdata.eq(i).val());
+			}
+		}
+	}
+</script>
+{% endblock %}

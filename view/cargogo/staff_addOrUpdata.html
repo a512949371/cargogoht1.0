@@ -1,0 +1,65 @@
+{% extends "../cargogo/base_addOrUpdata.html" %} {% block form_top %} {% endblock %} {% block form %}
+<input type="hidden" name="status" class="form-control" value="{{e.status}}">
+<div class="form-group">
+    <label class="col-sm-3 control-label">员工姓名：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.employeeName}}"  name="employeeName" class="form-control" data-rule="员工姓名:required:employeeName;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">电话号码：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.employeePhone}}"  name="employeePhone" class="form-control" data-rule="电话号码:required:employeePhone;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">身份证号：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.idCard}}"  name="idCard" class="form-control" data-rule="身份证号:required:idCard;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">职位：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.position}}"  name="position" class="form-control" data-rule="职位:required:position;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">入职时间：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.entryTime}}" id="entryTime"  name="entryTime" class="form-control" data-rule="入职时间:required:entryTime;">
+    </div>
+</div>
+
+{% endblock %}
+{% block form_submit %}
+        <div class="form-group">
+        	{% if e.status!=1 %}
+            <button type="button" style="margin-left:50%" class="btn btn-primary btn-sm" id="saveRoleBtn"
+                    onclick="checkEmpty()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>保存
+            </button>
+            {% else %}
+            <button type="button" style="margin-left:50%" class="btn btn-default btn-sm" id="saveRoleBtn"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>保存
+            </button>
+            {% endif %}
+        </div>
+        {% endblock %}
+ {% block form_custom %}
+
+<script>
+    $(function () {
+        var id = document.getElementById("eid");
+        var eid = id.value;
+        if (eid != null && eid != undefined && eid != '') {
+            $('#form1').attr('action', 'update');
+            $('#pagedes').html("编辑");
+            document.title = '编辑';
+        }
+    });
+
+    var entryTime = laydate.render({
+        elem: '#entryTime',
+        type: 'datetime',
+        
+    });
+</script>{% endblock %}

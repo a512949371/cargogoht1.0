@@ -1,0 +1,107 @@
+{% extends "../cargogo/base_list.html" %} {% block form_top %} {% endblock %} {% block content_top %}
+<div class="panel-heading">
+    <div class="panel-options">
+        <input type="hidden" id="pageStatus" value="{{pageStatus}}" name="pageStatus">
+        <ul class="nav nav-tabs">
+            <li class="{{'active' if pageStatus==null else ''}}">
+                <a href="selectOne?id={{id}}">基本资料</a>
+            </li>
+            <li class="{{'active' if pageStatus==1 else ''}}">
+                <a href="orderList?pageStatus=1&id={{id}}">订单记录</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">订单编号：{{orderId}}</label>
+</div>
+{% endblock %} {% block search_option %} {% endblock %} {% block search_bt %} {% endblock %} {% block table_th %}
+<th>编号</th>
+<th>车辆</th>
+<th>数量</th>
+<th>价格</th>
+<th>落户方式</th>
+<th>车辆识别代号</th>
+<th>车辆手续是否齐全</th>
+<th>车牌号</th>
+<th>操作</th>
+{% endblock %} {% block table_body %}
+<input type='hidden' id="accountId" name='accountId' value="{{id}}" /> {% for item in pageInfo.carBarnInfoVoList %}
+
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" name="ids" value="{{item.id}}" />
+    </td>
+    <td>{{loop.index}}</td>
+    <td>{{item.fullName}}</td>
+    <td>1</td>
+    <td>{{item.unitPrice}}</td>
+    <td><input  id="settleName{{item.id}}" class="form-control" placeholder="请输入落户方式"  value="{{item.settleName}}" /></td>
+    <td><input id="carCode{{item.id}}" class="form-control" placeholder="请输入车辆识别代号"  value="{{item.carCode}}" onblur="onfocusCarCode({{item.id}})"/></td>
+    <td id="isFormality{{item.id}}">{% if item.isFormality==1 %}齐全{% else %}不齐全{% endif %}</td>
+    <td><input  id="licensePlate{{item.id}}" class="form-control" placeholder="请输入车牌号"  value="{{item.licensePlate}}" /></td>
+    <td><a onclick="addCarCode({{item.id}})" class="btn btn-primary btn-xs">保存</a></td>
+</tr>
+{% endfor %} {% endblock %}
+{% block page_body %}
+
+{% endblock %} 
+{% block customCode %}
+<script>
+    $(function () {
+        $('#form0').attr('action', 'orderList?pageStatus=1&id={{id}}');
+    });
+    var vehicleInfoId =-1;
+    function onfocusCarCode(id){
+        $.ajax({
+                type: 'POST',
+                url: "vehicleInfo",
+                data: {
+                    id:id,
+                    carCode : $('#carCode'+id).val() },
+                async: true,
+                success: function (data) {
+                    var result = data;
+                    console.log(result);
+                    if (result.status == "0") {
+                        vehicleInfoId =result.body.data.id;
+                        if(result.body.data.isFormality=='1'){
+                            $('#isFormality'+id).html('齐全');
+                        }else{
+                            $('#isFormality'+id).html('不齐全');
+                        }
+                    } else {
+                        $('#isFormality'+id).html('不齐全');
+                    }
+                }
+            });
+    }
+
+    function addCarCode(id){
+        $.ajax({
+                type: 'POST',
+                url: "addCarCode",
+                data: { 
+                    id:id,
+                    settleName : $('#settleName'+id).val() ,
+                    vehicleInfoId :vehicleInfoId ,
+                    licensePlate :$('#licensePlate'+id).val() , 
+                    
+                 },
+                async: true,
+                success: function (data) {
+                    var result = data;
+                    console.log(result);
+                    if (result.status == "0") {
+                        layer.msg('操作成功!');
+                        window.setTimeout("refreshPage()", 2000);
+                        
+                    } else {
+                        layer.msg('操作失败!'+result.msg);
+                    }
+                }
+            });
+    }
+
+
+</script> {% endblock %} {% block out_body %} {% endblock %}

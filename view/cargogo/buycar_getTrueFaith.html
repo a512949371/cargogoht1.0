@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>征信流水</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/static/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/hplus/js/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+    <link href="/static/hplus/css/animate.min.css" rel="stylesheet">
+    <link href="/static/hplus/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <script src="/static/hplus/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/static/hplus/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="/static/hplus/js/content.js?v=1.0.0"></script>
+    <script src="/static/hplus/js/plugins/fancybox/jquery.fancybox.js"></script>
+    <script src="/static/layer/layer.js"></script>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div id="imglist">
+                    {% for item in pageInfo %}
+                    <a class="fancybox " href="{{item}}" title="图片1">
+                        <img src="{{item}}" />
+                    </a>
+                    {% endfor %}
+                </div>
+                <input type="file" name="imgfile" id="imgfile" onchange="changepic(this)" style="width: 0px;height: 0px;" />
+                <label for="imgfile" style="width: 120px;height: 160px;background: url('/static/images/addicon.png') no-repeat  ;background-size: 100%;"
+                    class="inputfile-bg"></label>
+            </div>
+            <div class="form-group">
+                <button type="button" style="margin-left:50%" class="btn btn-primary btn-sm" id="saveRoleBtn" onclick="addTrueFaith({{id}})"><span
+                        class="glyphicon glyphicon-ok" aria-hidden="true"></span>上传
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/ajaxfileupload.js"></script>
+    <script>
+        var imgStr = '';
+
+        $(document).ready(function () {
+            $('.fancybox').fancybox({
+                openEffect: 'none',
+                closeEffect: 'none'
+            });
+        });
+        function changepic(obj) {
+            var reads = new FileReader();
+            console.log(obj.files[0]);
+            ajaxFileUpload('imgfile');
+        }
+
+        function ajaxFileUpload(imgfile) {
+            $.ajaxFileUpload
+                (
+                {
+                    url: 'uploadImg', //用于文件上传的服务器端请求地址
+                    type: 'post',
+                    data: { 'a': 1 },
+                    secureuri: false, //是否需要安全协议，一般设置为false
+                    fileElementId: imgfile, //文件上传域的ID
+                    dataType: 'text', //返回值类型 一般设置为json
+                    success: function (data, status)  //服务器成功响应处理函数
+                    {
+                        data = $.parseJSON(data.replace(/<.*?>/ig, ""));
+                        console.log('uploadImg++++++', data)
+                        var error = data.error;
+                        if (error == 0) {
+                            console.log('append++++++')
+                            $("#imglist").append(" <a class='fancybox img-item' href=\"" + data.url + "\" title='图片1'><img src=\"" + data.url + "\" /></a>");
+                            if (imgStr != '') {
+                                imgStr = imgStr + ",";
+                            }
+                            imgStr = imgStr + data.img;
+                        } else {
+                            alert("图片上传失败");
+                        }
+                    },
+                    error: function (data, status, e)//服务器响应失败处理函数
+                    {
+                        alert(e);
+                    }
+                }
+                )
+            return false;
+        }
+
+        function addTrueFaith(id) {
+            if(imgStr==''){
+                layer.msg('没有新增征信流水');
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                url: "addTrueFaith",
+                data: {
+                    id: id,
+                    imgPath: imgStr
+                },
+                async: true,
+                success: function (data) {
+                    var result = data;
+                    console.log(result);
+                    if (result.status == "0") {
+                        layer.msg('操作成功');
+                        var index = parent.layer.getFrameIndex(window.name);
+                        setTimeout(function () {
+                            parent.layer.close(index);
+                            window.parent.location.reload()
+                        }, 1000);
+                    } else {
+                        layer.msg('操作失败!'+result.msg);
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+{% extends "../cargogo/base_list.html" %} {% block customTitle %}员工列表{% endblock %} {% block customTitle_h5 %}员工列表{%
+endblock%}
+{% block search_option %}
+{% endblock %} {% block search_bt %}
+{% endblock %} {% block table_th %}
+<th>编号</th>
+<th>员工姓名</th>
+<th>员工电话</th>
+<th>职位</th>
+{% endblock %} {% block table_body %} {% for item in pageInfo %}
+<tr class="gradeX">
+    <td>
+        <input type="checkbox" class="ids" value="{{item.id}}" data-name="{{item.employeeName}}" />
+    </td>
+    <td>{{item.id}}</td>
+    <td>{{item.employeeName}}</td>
+    <td>{{item.employeePhone}}</td>
+    <td>{{item.position}}</td>
+</tr>
+{% endfor %}
+{% endblock %}
+{% block page_body %}
+<div class="form-group">
+    <a onclick='designated({{orderId}},{{id}},{{assignType}})' type="button" style="margin-left:50%" class="btn btn-primary btn-sm">指派</a>
+</div>
+{% endblock %}
+{% block customCode %}
+<script>
+    let data = {};
+    $(function () {
+        //绑定表头id checkbox点击事件
+        $(".ids").on("click", function () {
+            // var checkdata = $("input[name=ids]");
+            if ($(this).prop("checked")) {
+                var key = $(this).val();
+                var name = $(this).data('name')
+                data[key] = name;
+                $(this).prop("checked", true);
+            } else {
+                $(this).prop("checked", false);
+                var key = $(this).val();
+                delete data[key];
+            }
+        });
+    });
+    function designated(orderId, id, assignType) {
+        console.log('designated id', id)
+        let emId = '';
+        let emName = '';
+        for (var p in data) {//遍历json对象的每个key/value对,p为key
+            if (emId != '') {
+                emId = emId + ',';
+            }
+            emId = emId + p;
+            if (emName != '') {
+                emName = emName + ',';
+            }
+            emName = emName + data[p];
+        }
+        layer.confirm('确定指派' + emName + '？', {
+            title: '指派', btn: ['确认', '取消'] //按钮
+        }, function () {
+
+            $.ajax({
+                type: 'POST',
+                url: "designatedUser",
+                data: {
+                    id: id,
+                    orderId: orderId,
+                    status: 1,
+                    emId: emId,
+                    emName: emName,
+                    assignType: assignType
+                },
+                async: true,
+                success: function (data) {
+                    var result = data;
+                    console.log(result);
+                    if (result.status == "0") {
+                        layer.msg('操作成功');
+                        var index = parent.layer.getFrameIndex(window.name);
+                        setTimeout(function () {
+                            parent.layer.close(index);
+                            window.parent.location.reload()
+                        }, 1000);
+                    } else {
+                        layer.msg('操作失败!');
+                    }
+                }
+            });
+        }, function () {
+
+        });
+    }
+
+
+
+
+</script> {% endblock %}

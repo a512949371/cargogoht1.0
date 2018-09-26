@@ -1,0 +1,112 @@
+{% extends "../cargogo/base_addOrUpdata.html" %} {% block form_top %} {% endblock %} {% block form %}
+<div class="form-group">
+    <label class="col-sm-3 control-label">车辆型号：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.vehicleType}}"  name="vehicleType" class="form-control" data-rule="车辆型号:required:vehicleType;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">车牌号：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.carNumber}}"  name="carNumber" class="form-control" data-rule="车牌号:required:carNumber;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">车主姓名：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.name}}"  name="name" class="form-control" data-rule="车主姓名:required:name;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">手机号码：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.telephone}}"  name="telephone" class="form-control" data-rule="手机号码:required:telephone;">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">身份证号：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.idCard}}"  name="idCard" class="form-control" data-rule="身份证号:required:idCard;">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">抵押金额：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.mortgagePrice}}"  name="mortgagePrice" class="form-control" data-rule="抵押金额:required:mortgagePrice;">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">抵押期限：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.mortgageDeadline}}"  name="mortgageDeadline" class="form-control" data-rule="抵押期限:required:mortgageDeadline;">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">一押：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.firstMortgage}}"  name="firstMortgage" class="form-control" data-rule="一押:required:firstMortgage;">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">二押：</label>
+    <div class="col-sm-7">
+        <input type="text" value="{{e.twoMortgage}}"  name="twoMortgage" class="form-control" data-rule="二押:required:twoMortgage;">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">开始时间：</label>
+    <div class="col-sm-7">
+        <input type="text" name="stratTime" class="form-control" id="startTime" value='{{e.stratTime}}'>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">结束时间：</label>
+    <div class="col-sm-7">
+        <input type="text" name="endTime" class="form-control" id="endTime" value='{{e.endTime}}'>
+    </div>
+</div>
+
+{% endblock %} {% block form_custom %}
+
+<script>
+    $(function () {
+        var id = document.getElementById("eid");
+        var eid = id.value;
+        if (eid != null && eid != undefined && eid != '') {
+            $('#form1').attr('action', 'update');
+            $('#pagedes').html("编辑");
+            document.title = '编辑';
+        }
+    });
+
+     var startTime = laydate.render({
+        elem: '#startTime',
+        type: 'datetime',
+        min:  'new Date()',
+        done: function (value, date, endDate) {
+            console.log('date', date);
+            endTime.config.min.year = date.year;
+            endTime.config.min.month = date.month - 1;
+            endTime.config.min.date = date.date;//开始日选好后，重置结束日的最小日期
+            endTime.config.value = value;//将结束日的初始值设定为开始日
+        }
+    });
+    var endTime = laydate.render({
+        elem: '#endTime',
+        type: 'datetime',
+        min:  'new Date()',
+        done: function (value, date, endDate) {
+            console.log('date', date);
+            startTime.config.max.year = date.year;
+            startTime.config.max.month = date.month - 1;
+            startTime.config.max.date = date.date;//开始日选好后，重置结束日的最小日期
+            startTime.config.value = value;//将结束日的初始值设定为开始日
+        }
+    });
+</script>{% endblock %}

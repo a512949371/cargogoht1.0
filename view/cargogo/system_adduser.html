@@ -1,0 +1,190 @@
+{% extends "./base_toAdd.html" %}
+{% block customTitle_src %}
+<div class="ibox-title">
+	<h5>运营端用户管理</h5>
+</div>
+{% endblock %} 
+{% block form_top %}
+{% endblock %}
+{% block form %}
+<div class="form" id="Addsmark">
+	<div class="form-item">
+		<label class="desc">姓名</label>
+		<input type="text" name="realName" placeholder="请输入姓名"
+		data-rule="required; realName" data-msg-required="请输入姓名">
+	</div>
+	<div class="form-item">
+		<label class="desc">昵称</label>
+		<input type="text" name="nickName" placeholder="请输入昵称"
+		data-rule="required; nickName" data-msg-required="请输入昵称">
+	</div>
+	<div class="form-item">
+		<label class="desc">员工账号</label>
+		<input type="text" name="userName" placeholder="请输入员工账号"
+		data-rule="required; userName" data-msg-required="请输入员工账号">
+	</div>
+	<div class="form-item">
+		<label class="desc">手机号</label>
+		<input type="text" name="telephone" placeholder="请输入手机号"
+		data-rule="required; telephone" data-msg-required="请输入手机号"
+		data-rule-telephone="[/^1[34578]\d{9}$/, '请输入正确手机号']">
+	</div>
+	<div class="form-item">
+		<label class="desc">初始密码</label>
+		<input type="password" name="passWord" placeholder="请输入初始密码"
+		data-rule="required; passWord" data-msg-required="请输入初始密码">
+	</div>
+	<div class="form-item">
+		<label class="desc">角色</label>
+		<select name="rid" data-rule="required" data-msg-required="请选择所属角色">
+			<option value="" selected="selected">请选择所属角色</option>
+			{% for item in rolelist %}
+			<option value="{{item.id}}">{{item.roleRank}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-item">
+		<label class="desc">邮箱</label>
+		<input type="text" name="email" placeholder="请输入邮箱"
+		data-rule="required; email" data-msg-required="请输入邮箱"
+		data-rule-telephone="/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/, '请输入正确邮箱格式']">
+	</div>
+	<div class="form-item form-button">
+		<a class="btn btn-primary btn-xs" id="{{clothesonedata.id}}" onclick="Trueupdata($(this))">提交</a>
+		<a class="btn btn-default btn-xs" onclick="Closefixed()">取消</a>
+	</div>
+</div>
+<!-- <div class="addsmark-box" id="Addsmark">
+	<div class="addsmark flex-box">
+		<div class="left">姓名：</div>
+		<input class="right" type="text"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">昵称：</div>
+		<input class="right" type="text"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">员工账号：</div>
+		<input class="right" type="text"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">手机号：</div>
+		<input class="right" type="text"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">初始密码：</div>
+		<input class="right" type="password"/>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">角色：</div>
+		<select class="right">
+			<option value="">请选择所属角色</option>
+			{% for item in rolelist %}
+			<option value="{{item.id}}">{{item.roleRank}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="addsmark flex-box">
+		<div class="left">邮箱：</div>
+		<input class="right" type="text"/>
+	</div>
+</div> -->
+{% endblock %}
+{% block form_submit %}
+<!-- <div class="addsmark-btn-box flex-box-center">
+	<div class="btn btn-success btn-xs" data-id="{{clothesonedata.id}}" onclick="Trueupdata($(this))">确认提交</div>
+	<div class="btn btn-primary btn-xs" onclick="Closefixed()">取消</div>
+</div> -->
+<script>
+	// 手机号判断
+	function  phoneTF(data) {
+	    if ((/^1[34578]\d{9}$/.test(data))) {
+	      return true
+	    } else {
+	      return false
+	    }
+	  };
+	//邮箱验证
+	function Email(data){
+		if((/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(data))){
+			return true
+		}else{
+			return false
+		}
+	};
+	//关闭弹窗
+    function Closefixed(){
+    	var index = parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+    }
+	//打开可选管辖柜子列表
+	var groupdata={
+		realName:'',
+		nickName:'',
+		userName:'',
+		telephone:'',
+		passWord:'',
+		rid:'',
+		email:'',
+	};
+	//关闭弹窗
+    function Closefixed(){
+    	var index = parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+    }
+    //确认修改
+    function Trueupdata(obj){
+    		groupdata.realName=$("#Addsmark").find("input").eq(0).val();
+    		groupdata.nickName=$("#Addsmark").find("input").eq(1).val();
+    		groupdata.userName=$("#Addsmark").find("input").eq(2).val();
+    		groupdata.telephone=$("#Addsmark").find("input").eq(3).val();
+    		groupdata.passWord=$("#Addsmark").find("input").eq(4).val();
+    		groupdata.rid=$("#Addsmark").find("select :selected").eq(0).val();
+    		groupdata.email=$("#Addsmark").find("input").eq(5).val();
+    	console.log(groupdata)
+    	if(groupdata.realName!=''&&groupdata.nickName!=''&&groupdata.userName!=''&&phoneTF(groupdata.telephone)&&groupdata.passWord!=''&&groupdata.rid!=''&&Email(groupdata.email)){
+			$.ajax({
+	    		type:"post",
+	    		url:"adduserone",
+	    		async:true,
+	    		data:groupdata,
+	    		success:function(data){
+	    			if(data.status==0){
+	    				layer.msg('新增成功');
+						var index = parent.layer.getFrameIndex(window.name);
+						setTimeout(function(){
+							parent.layer.close(index);
+							window.parent.location.reload()
+							}, 1000);
+					}else if(data.status==401){
+						window.location.href='/auth/login'
+					}else{
+	    				layer.msg(data.msg);
+	    			}
+	    		}
+	    	});    		
+    	}else{
+    		if(groupdata.realName==''){
+    			layer.msg('姓名不能为空');
+    		}else if(groupdata.nickName==''){
+    			layer.msg('昵称不能为空');
+    		}
+    		else if(groupdata.userName==''){
+    			layer.msg('用户名不能为空');
+    		}else if(!phoneTF(groupdata.telephone)){
+    			layer.msg('请输入正确的手机号');
+    		}else if(!Email(groupdata.email)){
+    			layer.msg('请输入正确的邮箱');
+    		}
+    		else if(groupdata.rid==''){
+    			layer.msg('角色不能为空');
+    		}else{
+    			layer.msg('密码不能为空');
+    		}
+    	}
+    	
+    }
+</script>
+{% endblock %}
+{% block form_scr %}
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "../cargogo/base_list.html" %}
+{% block customTitle %}首页广告{% endblock %}
+{% block customTitle_h5 %}首页广告{% endblock%}
+{% block search_option %}
+{% endblock %}
+{% block search_bt %}
+<a onclick="addOrUpdata('-1')" class="btn btn-primary btn-sm">
+	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</a>
+{% endblock %}
+{% block table_th %}
+<th>编号</th>
+<th>名称</th>
+<th>内容</th>
+<th>广告类型</th>
+<th>首页展示</th>
+<th>操作</th>
+{% endblock %}
+{% block table_body %}
+{% for item in pageInfo.records %}
+<tr class="gradeX">
+	<td>
+		<input type="checkbox" name="ids" value="{{item.id}}" />
+	</td>
+	<td>{{item.id}}</td>
+	<td>{{item.title}}</td>
+	<td class="img"><img src="{{item.imgPath}}" /></td>
+	<td>
+		{% if item.type=='0' %}
+		 首页轮播
+		{% else %}
+		首页弹窗
+		{%endif %}
+	</td>
+	<td>
+		{% if item.isPage=='0' %}
+		<input class="switch-change switch-anim" value="{{item.id}}" onchange="checkNum($(this))" type="checkbox" checked>
+		{% else %}
+		<input class="switch-change switch-anim" value="{{item.id}}" onchange="checkNum($(this))" type="checkbox">
+		{% endif %}
+
+	</td>
+	<td>
+		<a href="javascript:;" class="btn btn-primary btn-xs" onclick="addOrUpdata('{{item.id}}')">编辑</a>
+		<a href="javascript:;" class="btn btn-danger btn-xs" onclick="del('{{item.id}}')">删除</a>
+	</td>
+</tr>
+{% endfor %}
+<script>
+	function addOrUpdata(id) {
+		layer.open({
+			type: 2,
+			title: '添加广告',
+			shadeClose: true,
+			shade: 0.5,
+			area: ['70%', '90%'],
+			content: '/cargogo/advertisement/addOrUpdata?id=' + id //iframe的url
+		})
+	}
+
+	function checkNum(obj) {
+		var changedata = {
+			id: obj.val(),
+			isPage: 1
+		}
+		if (obj.prop('checked')) {
+			console.log("选中");
+			changedata.isPage = 0;
+		} else {
+			console.log("没选中");
+			changedata.isPage = 1;
+		}
+		console.log(changedata);
+		$.ajax({
+			type: "post",
+			url: "/cargogo/advertisement/changePageType",
+			async: true,
+			data: changedata,
+			success: function (res) {
+				console.log(res)
+				var isfirefox=false;
+				if(res.status == 0) {
+					layer.msg(res.body.msg);
+				} else {
+					layer.msg(res.msg);
+					if (navigator.userAgent.indexOf('Firefox') >= 0) {
+						isfirefox=true;
+					} 
+				}
+				setTimeout(function(){
+					window.location.reload();
+					if(isfirefox){
+						obj.removeAttr("checked");
+					}
+				},1000)
+			},
+			complete: function (res) {
+
+			}
+		});
+	}
+	function del(id) {
+		layer.confirm('确定删除？', {
+			title: '提示', btn: ['确认', '取消'] //按钮
+		}, function () {
+			$.ajax({
+				type: 'POST',
+				url: "delete",
+				data: {
+					id: id,
+				},
+				async: true,
+				success: function (data) {
+					var result = data;
+					console.log(result);
+					if (result.status == "0") {
+						layer.msg('操作成功!');
+						window.setTimeout("refreshPage()", 2000);
+					} else {
+						layer.msg('操作失败!');
+					}
+				}
+			});
+		}, function () {
+
+		});
+	}
+</script>
+{% endblock %}

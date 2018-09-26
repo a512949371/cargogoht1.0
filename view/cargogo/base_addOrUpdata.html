@@ -1,0 +1,20 @@
+{% extends "../cargogo/base_toAdd.html" %} {% block addorupdata_custom %}
+<input type="hidden" value="{{myStatus}}" id="myStatus">
+<input type="hidden" value="{{msg}}" id="msg">
+<script>
+    var myStatus = $('#myStatus').val();
+    var msg = $('#msg').val();
+    console.log('myStatus', myStatus);
+    if (myStatus != null && myStatus != undefined && myStatus != '') {
+        if (myStatus == 0) {
+            layer.msg('操作成功');
+            var index = parent.layer.getFrameIndex(window.name);
+            setTimeout(function () {
+                parent.layer.close(index);
+                window.parent.location.reload()
+            }, 1000);
+        }else{
+            layer.msg('操作失败');
+        }
+    }
+</script> {% endblock %}

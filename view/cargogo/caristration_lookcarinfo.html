@@ -1,0 +1,281 @@
+{% extends "../cargogo/base_toAdd.html" %} {% block form_top %} {% endblock %} {% block form %}
+<div class="editcar-parbox flex-box" id="Editcarparbox">
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc"><span class="red">*</span>车辆栏目</div>
+		<div class="editcar-input">
+			<select class="form-control" name="rankId" id="status">
+				{% for item in rankdata %}
+				<option value="{{item.rankId}}" {% if item.rankId== pageInfo.rankId %} selected {% else %} {% endif %}>{{item.rankName}}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc"><span class="red">*</span>车辆状态</div>
+		<div class="editcar-input">
+			<select>
+				<option value="0" {% if pageInfo.status=='0' %}selected {% else %}{% endif %}>上架</option>
+				<option value="1" {% if pageInfo.status=='1' %}selected {% else %}{% endif %}>下架</option>
+				<option value="2" {% if pageInfo.status=='2' %}selected {% else %}{% endif %}>售罄</option>
+				<option value="3" {% if pageInfo.status=='3' %}selected {% else %}{% endif %}>删除</option>
+			</select>
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc"><span class="red">*</span>库存</div>
+		<div class="editcar-input">
+			<input placeholder="请输入库存" value="0" />
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc">标签一</div>
+		<div class="editcar-input">
+			<input placeholder="请输入标签(不超过7个汉字)" value="{{pageInfo.firstTags}}" />
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc">标签二</div>
+		<div class="editcar-input">
+			<input placeholder="请输入标签(不超过7个汉字)" value="{{pageInfo.twoTags}}" />
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc"><span class="red">*</span>指导价(万)</div>
+		<div class="editcar-input">
+			<input placeholder="请输入指导价" value="{{pageInfo.guidePrice}}" />
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc"><span class="red">*</span>裸车价(万)</div>
+		<div class="editcar-input">
+			<input placeholder="请输入裸车价" value="{{pageInfo.price}}" />
+		</div>
+	</div>
+	<div class="editcar-par flex-box">
+		<div class="editcar-desc"><span class="red">*</span>首付(万)</div>
+		<div class="editcar-input">
+			<input placeholder="请输入首付" value="{{pageInfo.downPayment}}" />
+		</div>
+	</div>
+</div>
+<div class="stages-box">
+	<div class="stages-btn-box">
+		<div class="stages-btn" onclick="Insertstage('{{pageInfo.id}}')">新增期数</div>
+	</div>
+	<div class="stages-list-box">
+		<div class="stages-list-nav flex-box" id="Stageslistnav">
+			{% for item in buycarfrequency %} {% if loop.index==1 %}
+			<div class="stages-nav active" onclick="Changenav($(this),'{{loop.index-1}}')">{{item.nper}}期
+				<span class="close-icon" onclick="Deletenper('{{item.id}}')">X</span>
+			</div>
+			{% else %}
+			<div class="stages-nav" onclick="Changenav($(this),'{{loop.index-1}}')">{{item.nper}}期
+				<span class="close-icon" onclick="Deletenper('{{item.id}}')">X</span>
+			</div>
+			{% endif %} {% endfor %}
+		</div>
+		<div class="stages-list" id="Stageslist">
+			{% for item in buycarfrequency %} {% if loop.index==1 %}
+			<div class="stages active" data-id="{{item.id}}">
+				<div class="stages-num flex-box">
+					<div class="desc">{{item.nper}}期</div>
+					<input class="switch-change switch-anim" value="{{item.status}}" onchange="checkNum($(this),'{{pageInfo.id}}','{{item.id}}')" type="checkbox" {% if item.status==0 %} checked {% else %}{% endif %}>
+				</div>
+				<div class="stages-par-box flex-box">
+					<div class="flex-box stages-par">
+						<div class="desc"><span class="red">*</span>总利息(元)：</div>
+						<input placeholder="请输入总利息" value="{{item.interest}}" />
+					</div>
+					<div class="flex-box stages-par">
+						<div class="desc"><span class="red">*</span>月供(元)：</div>
+						<input placeholder="请输入月供" value="{{item.monthPay}}" />
+					</div>
+				</div>
+			</div>
+			{% else %}
+			<div class="stages" data-id="{{item.id}}">
+				<div class="stages-num flex-box">
+					<div class="desc">{{item.nper}}期</div>
+					<input class="switch switch-anim" value="{{item.status}}" onchange="checkNum($(this),'{{pageInfo.id}}','{{item.id}}')" type="checkbox" {% if item.status==0 %} checked {% else %}{% endif %}>
+				</div>
+				<div class="stages-par-box flex-box">
+					<div class="flex-box stages-par">
+						<div class="desc"><span class="red">*</span>总利息(元)：</div>
+						<input type="text" placeholder="请输入总利息" value="{{item.interest}}" />
+					</div>
+					<div class="flex-box stages-par">
+						<div class="desc"><span class="red">*</span>月供(元)：</div>
+						<input type="text" placeholder="请输入月供" value="{{item.monthPay}}" />
+					</div>
+				</div>
+			</div>
+			{% endif %} {% endfor %}
+		</div>
+	</div>
+
+</div>
+<script>
+	function checkNum(obj, vid, id) {
+		var data = {
+			vehicleId: vid,
+			id: id,
+			status: obj.val(),
+		}
+		if(obj.prop('checked')) {
+			console.log("选中");
+		} else {
+			console.log("没选中");
+		}
+		$.ajax({
+			type: "post",
+			url: "/cargogo/caristration/isbuycarfrequency",
+			data: data,
+			async: true,
+			success: function(res) {
+				console.log(res)
+				var isfirefox=false;
+				if(res.status == 0) {
+					layer.msg(res.body.msg);
+				} else {
+					layer.msg(res.msg);
+					if (navigator.userAgent.indexOf('Firefox') >= 0) {
+						isfirefox=true;
+					} 
+				}
+				setTimeout(function(){
+					window.location.reload();
+					if(isfirefox){
+						obj.removeAttr("checked");
+					}
+				},1000)
+			}
+		});
+	}
+
+	function Changenav(obj, index) {
+		obj.addClass("active").siblings().removeClass("active");
+		$("#Stageslist .stages").eq(index).addClass("active").siblings().removeClass("active");
+		return false;
+	}
+
+	function Insertstage(id) {
+		layer.prompt({
+			title: '输入期数',
+			formType: 0
+		}, function(text, index) {
+			$.ajax({
+				type: "get",
+				url: "/cargogo/caristration/insertbuycarfrequency?vehicleId=" + id + '&nper=' + text,
+				async: true,
+				success: function(res) {
+					console.log("res", res)
+					if(res.status==0) {
+						layer.msg(res.body.msg)
+						setTimeout(function() {
+							window.location.reload();
+						}, 1000)
+					} else {
+						layer.msg(res.msg)
+					}
+					layer.close(index);
+				}
+			});
+		})
+	}
+
+	function Deletenper(id) {
+		layer.confirm('您是确定要删除该分期？', {
+			btn: ['确定', '取消'] //按钮
+		}, function() {
+			$.ajax({
+				type: "get",
+				url: "/cargogo/caristration/deletebuycarfrequency?id=" + id,
+				async: true,
+				success: function(res) {
+					if(res.status == 0) {
+						layer.msg(res.body.msg)
+						setTimeout(function() {
+							window.location.reload();
+						}, 1000)
+					} else {
+						layer.msg(res.msg)
+					}
+				}
+			});
+		})
+		return false;
+	}
+</script>
+{% endblock %} {% block form_submit %}
+<div class="carist-btn-box flex-box-center">
+	<div class="btn" onclick="Closepage('{{pageInfo.id}}')">确定</div>
+</div>
+<script>
+	function Closepage(vid) {
+		var data = {
+			vehicleId: vid,
+			carBuyConfigList: [],
+			downPayment: $("#Editcarparbox").find("input").eq(5).val() || '',
+			guidePrice: $("#Editcarparbox").find("input").eq(3).val() || '',
+			inventory: $("#Editcarparbox").find("input").eq(0).val() || '',
+			price: $("#Editcarparbox").find("input").eq(4).val() || '',
+			rankId: $("#Editcarparbox").find("select option:selected").eq(0).val() || '',
+			rankName: $("#Editcarparbox").find("select option:selected").eq(0).text() || '',
+			status: $("#Editcarparbox").find("select option:selected").eq(1).val() || '',
+			firstTags: $("#Editcarparbox").find("input").eq(1).val() || '',
+			twoTags: $("#Editcarparbox").find("input").eq(2).val() || '',
+		}
+		var stagesdata = $("#Stageslist .stages");
+		for(var i = 0; i < stagesdata.length; i++) {
+			var nperdata = {
+				id: stagesdata.eq(i).attr("data-id"),
+				interest: stagesdata.eq(i).find("input").eq(1).val(),
+				monthPay: stagesdata.eq(i).find("input").eq(2).val(),
+				status: stagesdata.eq(i).find("input").eq(0).val(),
+				vehicleId: vid
+			}
+			data.carBuyConfigList.push(nperdata);
+		}
+		console.log(data)
+		if(data.downPayment != '' && data.guidePrice != '' && data.inventory != '' && data.price != '' && data.status != '' && data.rankId != '') {
+			$.ajax({
+				type: "post",
+				url: "/cargogo/caristration/editcar",
+				contentType: 'application/json;charset=utf-8',
+				async: true,
+				dataType: "json",
+				data: JSON.stringify(data),
+				success: function(res) {
+					console.log(res);
+					if(res.status == 0) {
+						layer.msg(res.body.msg)
+						setTimeout(function() {
+							//$(".J_menuTab.active", window.top.document).find(".fa.fa-times-circle").click(); 							
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+							window.parent.location.reload()
+						}, 1000)
+					} else {
+						layer.msg(res.msg)
+					}
+				}
+			});
+		} else {
+			if(data.rankId == '') {
+				layer.msg("车辆栏目不能为空")
+			} else if(data.status == '') {
+				layer.msg("车辆状态不能为空")
+			} else if(data.inventory == '') {
+				layer.msg("车辆库存不能为空")
+			} else if(data.guidePrice == '') {
+				layer.msg("指导价不能为空")
+			} else if(data.price == '') {
+				layer.msg("裸车价不能为空")
+			} else if(data.downPayment == '') {
+				layer.msg("首付不能为空")
+			}
+		}
+		//
+	}
+</script>
+{% endblock %}

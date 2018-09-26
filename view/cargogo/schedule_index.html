@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link href="/static/js/fullcalendar-1.6.4/fullcalendar/fullcalendar.css" rel="stylesheet"/>
+		<script src="/static/js/fullcalendar-1.6.4/lib/jquery.min.js"></script>
+		<script src="/static/js/fullcalendar-1.6.4/lib/jquery-ui.custom.min.js"></script>
+		<script src="/static/js/fullcalendar-1.6.4/fullcalendar/fullcalendar.min.js"></script>
+		<style>
+			#Form{
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 99;
+				display: none;
+			}
+			#Form .shaw{
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: rgba(0,0,0,0.5);
+			}
+			#Form .content{
+				position: absolute;
+				top: calc(50% - 100px);
+				left: calc(50% - 200px);
+				width: 400px;
+				height: 200px;
+				background-color: #FFF;
+				border-radius: 5px;
+			}
+			#Form .box{
+				display: flex;
+				align-items: center;
+				padding: 10px 20px;
+			}
+			#Form .btn-box{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 10px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='calendar'></div>
+		<div id="Form">
+			<div class="shaw"></div>
+			<div class="content">
+				<form>
+				<div class="box">
+					<div class="desc">标题</div>
+					<input type="text" />
+				</div>
+				<div class="box">
+					<div class="desc">内容</div>
+					<input type="text" />
+				</div>
+				<div class="box">
+					<div class="desc">时间</div>
+					<input type="text" />
+				</div>
+				<div class="btn-box">
+					<button type="submit">提交</button>
+					<button type="button">取消</button>
+				</div>
+			</form>
+			</div>
+		</div>
+		<script>
+			$(document).ready(function() {
+			    // 页面加载完毕，初始化Canlendar
+			    $('#calendar').fullCalendar({
+			    	header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek'
+					},
+					defaultDate: '2017-03-12',
+					navLinks: true, // can click day/week names to navigate views
+					editable: true,
+					selectable: true,
+					eventLimit: true, // allow "more" link when too many events
+					events:[{
+					  id: 1,
+					  title: "标题一",
+					  starttime: "2018-8-23 12:00",
+					  endtime: "2018-8-23 13:00",
+					  allday:false,
+					  color:"#555"
+					},
+					{
+					  id: 2,
+					  title: "标题二",
+					  starttime: "2018-8-24 12:00",
+					  endtime: "2018-8-24 13:00",
+					  allday:false,
+					  color:"#555"
+					},
+					{
+					  id: 3,
+					  title: "标题三",
+					  starttime: "2018-8-25 12:00",
+					  endtime: "2018-8-25 13:00",
+					  allday:false,
+					  color:"#555"
+					}],
+					loading: function(bool) {
+						$('#loading').toggle(bool);
+					},
+					eventRender: function(event, el) {
+						// render the timezone offset below the event title
+						if (event.start.hasZone()) {
+							el.find('.fc-title').after(
+								$('<div class="tzo"/>').text(event.start.format('Z'))
+							);
+						}
+					},
+					dayClick: function(date) {
+						console.log('dayClick', date);
+						$(this).css({"background-color":"#666"})
+					},
+					select: function(startDate, endDate) {
+						console.log('select', startDate, endDate);
+						$(this).css({"background-color":"#666"})
+					}
+			        // 你的选项配置和回调函数
+			    });
+			});
+		</script>
+	</body>
+</html>

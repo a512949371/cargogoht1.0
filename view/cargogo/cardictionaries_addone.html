@@ -1,0 +1,2116 @@
+{% extends "../cargogo/base_toAdd.html" %} {% block customHead %}
+<script src="/static/js/ajaxfileupload.js"></script>
+<style>
+	#Img img {
+		width: 100px;
+		height: 100px;
+	}
+	
+	#Imglist img {
+		width: 120px;
+		height: 80px;
+	}
+	
+	.btn-1 {
+		padding: 5px 10px;
+		border: 1px solid #0079fe;
+		color: #0079fe;
+		margin: 10px;
+		cursor: pointer;
+	}
+	
+	.list-box {
+		display: none;
+	}
+</style>
+{% endblock %} {% block form_top %} {% endblock %} {% block form %}
+<div id="Parinfobox" style="position: relative;">
+	<!--信息设置-->
+	<div class="list-box">
+		<div class="cardic-tit">信息设置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc"><span class="red">*</span>品牌</div>
+				<div class="editcar-input" onclick="Choosebrand()" id="Brand">
+					请选择品牌
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">型号</div>
+				<div class="editcar-input">
+					<input placeholder="请输入型号" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">名称</div>
+				<div class="editcar-input">
+					<input placeholder="请输入名称" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box" style="border: none;">
+				<div class="editcar-desc"></div>
+				<div class="editcar-input">
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">列表图片</div>
+				<div class="editcar-input flex-box" style="flex-wrap: wrap;height: 100px;overflow-y: scroll;">
+					<fieldset>
+						<div style="position: relative;" id="Img" class="imgbox">
+						</div>
+					</fieldset>
+					<div>
+						<input onchange="FirstImg('Aloneimg','Img','1')" style="opacity:0;position:absolute;width: 100px;height: 100px;" id="Aloneimg" name="aloneimg" type="file">
+						<div style="width: 100px;height: 100px; line-height: 100px;font-size: 36px;text-align: center;border: #1px solid #e5e5e5;">
+							<span>+</span>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">详情图片</div>
+				<div class="editcar-input flex-box" style="flex-wrap: wrap;height: 100px;overflow-y: scroll;">
+					<fieldset>
+						<div style="position: relative;" id="Imglist" class="imgbox">
+						</div>
+					</fieldset>
+					<div style="position: relative;">
+						<input onchange="FirstImg('Allimg','Imglist','50')" style="opacity:0;position:absolute;top:0;left:0;width: 120px;height: 80px;" id="Allimg" name="allimg" type="file" multiple="">
+						<div style="width: 120px;height: 80px; line-height: 80px;font-size: 36px;text-align: center;border: #1px solid #e5e5e5;">
+							<span>+</span>
+						</div>
+					</div>
+
+				</div>
+			</li>
+			<li class="flex-box" style="width: 100%;">
+				<div style="width: 50%;"><button onclick="ajaxFileUpload('1','Aloneimg','')" type="button">列表图片上传</button></div>
+				<div style="width: 50%;"><button onclick="ajaxFileUpload('2','Allimg','')" type="button">详情图片上传</button></div>
+			</li>
+		</ul>
+
+		<div class="page-box ">1/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('1')">下一步</div>
+		</div>
+	</div>
+	<!--基本参数-->
+	<div class="list-box">
+		<div class="cardic-tit">基本参数</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">厂商</div>
+				<div class="editcar-input">
+					<input placeholder="请输入厂商" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">级别</div>
+				<div class="editcar-input">
+					<input placeholder="请输入级别" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">能源类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入能源类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">上市时间</div>
+				<div class="editcar-input">
+					<input placeholder="请输入上市时间" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">工信部纯电续驶里程</div>
+				<div class="editcar-input">
+					<input placeholder="请输入工信部纯电续驶里程" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">发动机</div>
+				<div class="editcar-input">
+					<input placeholder="请输入发动机" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">变速箱</div>
+				<div class="editcar-input">
+					<input placeholder="请输入变速箱" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最高车速</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最高车速" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">官方0-100km/h加速（s）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入加速" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">工信部综合油耗（L/100km）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入工信部综合油耗" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">整车质保</div>
+				<div class="editcar-input">
+					<input placeholder="请输入整车质保" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">外部颜色</div>
+				<div class="editcar-input">
+					<input placeholder="请输入外部颜色" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">内饰颜色</div>
+				<div class="editcar-input">
+					<input placeholder="请输入内饰颜色" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">2/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('2')">下一步</div>
+		</div>
+	</div>
+	<!--车身配置-->
+	<div class="list-box">
+		<div class="cardic-tit">车身配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">长度</div>
+				<div class="editcar-input">
+					<input placeholder="请输入长度" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">宽度</div>
+				<div class="editcar-input">
+					<input placeholder="请输入宽度" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">高度</div>
+				<div class="editcar-input">
+					<input placeholder="请输入高度" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">轴距</div>
+				<div class="editcar-input">
+					<input placeholder="请输入轴距" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前轮距</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前轮距" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后轮距</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后轮距" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最小离地间隙</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最小离地间隙" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车门数（个）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车门数" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">座位数（个）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入座位数" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车身结构</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车身结构" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">油箱容积（L）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入油箱容积" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">行李箱容积（L）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入行李箱容积" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">整备质量（kg）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入整备质量" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">3/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('3')">下一步</div>
+		</div>
+	</div>
+	<!--发动机配置-->
+	<div class="list-box">
+		<div class="cardic-tit">发动机配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">发动机型号</div>
+				<div class="editcar-input">
+					<input placeholder="请输入发动机型号" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">排量（L）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入排量" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">进气形式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入进气形式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">气缸排列形式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入气缸排列形式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">气缸数（个）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入气缸数（个）" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">每缸气门数（个）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入每缸气门数" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">压缩比</div>
+				<div class="editcar-input">
+					<input placeholder="请输入压缩比" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">缸径（mm）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入缸径" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最大马力（Ps）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最大马力" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最大功率（kW）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最大功率" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最大功率转速（rpm）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最大功率转速" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最大扭矩（N.m）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最大扭矩" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">最大扭转转速（rpm）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入最大扭转转速" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">发动机特有技术</div>
+				<div class="editcar-input">
+					<input placeholder="请输入发动机特有技术" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">燃料形式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入燃料形式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">燃油标号</div>
+				<div class="editcar-input">
+					<input placeholder="请输入燃油标号" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">供油方式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入供油方式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">缸盖材料</div>
+				<div class="editcar-input">
+					<input placeholder="请输入缸盖材料" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">缸体材料</div>
+				<div class="editcar-input">
+					<input placeholder="请输入缸体材料" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">环保标准</div>
+				<div class="editcar-input">
+					<input placeholder="请输入环保标准" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">4/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('4')">下一步</div>
+		</div>
+	</div>
+	<!--变速箱配置-->
+	<div class="list-box">
+		<div class="cardic-tit">变速箱配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">挡位个数</div>
+				<div class="editcar-input">
+					<input placeholder="请输入挡位个数" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">变速箱类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入变速箱类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">变速箱描述</div>
+				<div class="editcar-input">
+					<input placeholder="请输入变速箱描述" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">5/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('5')">下一步</div>
+		</div>
+	</div>
+	<!--底盘专向-->
+	<div class="list-box">
+		<div class="cardic-tit">底盘专向</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">驱动方式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入驱动方式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">四驱形式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入四驱形式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">中央差速器结构</div>
+				<div class="editcar-input">
+					<input placeholder="请输入中央差速器结构" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前悬架类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前悬架类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后悬架类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后悬架类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">助力类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入助力类型" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">6/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('6')">下一步</div>
+		</div>
+	</div>
+	<!--车轮制作-->
+	<div class="list-box">
+		<div class="cardic-tit">车轮制作</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前制动器类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前制动器类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后制动器类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后制动器类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">驻车制动类型</div>
+				<div class="editcar-input">
+					<input placeholder="请输入驻车制动类型" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前轮胎规格</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前轮胎规格" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后轮胎规格</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后轮胎规格" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">备胎规格</div>
+				<div class="editcar-input">
+					<input placeholder="请输入备胎规格" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">7/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('7')">下一步</div>
+		</div>
+	</div>
+	<!--安全装备-->
+	<div class="list-box">
+		<div class="cardic-tit">安全装备</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">主驾驶座安全气囊</div>
+				<div class="editcar-input">
+					<input placeholder="请输入主驾驶座安全气囊" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">副驾驶座安全气囊</div>
+				<div class="editcar-input">
+					<input placeholder="请输入副驾驶座安全气囊" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前/后排侧气囊</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前/后排侧气囊" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前排头部气囊（气帘）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前排头部气囊" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排头部气囊（气帘）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排头部气囊" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">膝部气囊</div>
+				<div class="editcar-input">
+					<input placeholder="请输入膝部气囊" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">胎压监测装置</div>
+				<div class="editcar-input">
+					<input placeholder="请输入胎压监测装置" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">零胎压继续行驶</div>
+				<div class="editcar-input">
+					<input placeholder="请输入零胎压继续行驶" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">安全带未系提示</div>
+				<div class="editcar-input">
+					<input placeholder="请输入安全带未系提示" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">ISOFIX儿童座椅接口</div>
+				<div class="editcar-input">
+					<input placeholder="请输入ISOFIX儿童座椅接口" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">ABS防抱死</div>
+				<div class="editcar-input">
+					<input placeholder="请输入ABS防抱死" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">制动力分配（EBD/CBC等）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入制动力分配" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">刹车辅助（EBA/BAS/BA等）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入刹车辅助" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">牵引力控制（ASR/TCS/TRC等）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入牵引力控制" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车身稳定控制（ESC/ESP/DSC等）</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车身稳定控制" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">并线辅助</div>
+				<div class="editcar-input">
+					<input placeholder="请输入并线辅助" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车道偏离预警系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车道偏离预警系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">主动刹车/主动安全系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入主动刹车/主动安全系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">夜视系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入夜视系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">疲劳驾驶提示</div>
+				<div class="editcar-input">
+					<input placeholder="请输入疲劳驾驶提示" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">8/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('8')">下一步</div>
+		</div>
+	</div>
+	<!--操作配置-->
+	<div class="list-box">
+		<div class="cardic-tit">操作配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前/后驻车雷达</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前/后驻车雷达" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">倒车视频影像</div>
+				<div class="editcar-input">
+					<input placeholder="请输入倒车视频影像" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">全景摄像头</div>
+				<div class="editcar-input">
+					<input placeholder="请输入全景摄像头" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">定速巡航</div>
+				<div class="editcar-input">
+					<input placeholder="请输入定速巡航" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">自适应巡航</div>
+				<div class="editcar-input">
+					<input placeholder="请输入自适应巡航" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">自动泊车入位</div>
+				<div class="editcar-input">
+					<input placeholder="请输入自动泊车入位" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">发动机启停技术</div>
+				<div class="editcar-input">
+					<input placeholder="请输入发动机启停技术" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">上坡辅助</div>
+				<div class="editcar-input">
+					<input placeholder="请输入上坡辅助" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">自动驻车</div>
+				<div class="editcar-input">
+					<input placeholder="请输入自动驻车" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">陡坡缓降</div>
+				<div class="editcar-input">
+					<input placeholder="请输入陡坡缓降" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">可变悬架</div>
+				<div class="editcar-input">
+					<input placeholder="请输入可变悬架" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">空气悬架</div>
+				<div class="editcar-input">
+					<input placeholder="请输入空气悬架" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">可变转向比</div>
+				<div class="editcar-input">
+					<input placeholder="请输入可变转向比" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">整体主动转向系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入整体主动转向系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前桥限滑差速器/差速锁</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前桥限滑差速器/差速锁" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后桥限滑差速器/差速锁</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后桥限滑差速器/差速锁" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">中央差速器锁止功能</div>
+				<div class="editcar-input">
+					<input placeholder="请输入中央差速器锁止功能" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">9/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('9')">下一步</div>
+		</div>
+	</div>
+	<!--外部配置-->
+	<div class="list-box">
+		<div class="cardic-tit">外部配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">电动天窗</div>
+				<div class="editcar-input">
+					<input placeholder="请输入电动天窗" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">全景天窗</div>
+				<div class="editcar-input">
+					<input placeholder="请输入全景天窗" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">运动外观套件</div>
+				<div class="editcar-input">
+					<input placeholder="请输入运动外观套件" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">铝合金轮圈</div>
+				<div class="editcar-input">
+					<input placeholder="请输入铝合金轮圈" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">电动吸合门</div>
+				<div class="editcar-input">
+					<input placeholder="请输入电动吸合门" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">侧滑门</div>
+				<div class="editcar-input">
+					<input placeholder="请输入侧滑门" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">电动后备箱</div>
+				<div class="editcar-input">
+					<input placeholder="请输入电动后备箱" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">感应后备箱</div>
+				<div class="editcar-input">
+					<input placeholder="请输入感应后备箱" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车顶行李架</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车顶行李架" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">发动机电子防盗</div>
+				<div class="editcar-input">
+					<input placeholder="请输入发动机电子防盗" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车内中控锁</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车内中控锁" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">遥控钥匙</div>
+				<div class="editcar-input">
+					<input placeholder="请输入遥控钥匙" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">无钥匙启动系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入无钥匙启动系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">无钥匙进入系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入无钥匙进入系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">远程启动</div>
+				<div class="editcar-input">
+					<input placeholder="请输入远程启动" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">10/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('10')">下一步</div>
+		</div>
+	</div>
+	<!--内部配置-->
+	<div class="list-box">
+		<div class="cardic-tit">内部配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">真皮方向盘</div>
+				<div class="editcar-input">
+					<input placeholder="请输入真皮方向盘" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">方向盘调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入方向盘调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">方向盘电动调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入方向盘电动调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">多功能方向盘</div>
+				<div class="editcar-input">
+					<input placeholder="请输入多功能方向盘" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">方向盘换挡</div>
+				<div class="editcar-input">
+					<input placeholder="请输入方向盘换挡" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">方向盘加热</div>
+				<div class="editcar-input">
+					<input placeholder="请输入方向盘加热" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">方向盘记忆</div>
+				<div class="editcar-input">
+					<input placeholder="请输入方向盘记忆" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">行车电脑显示屏</div>
+				<div class="editcar-input">
+					<input placeholder="请输入行车电脑显示屏" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">全液晶仪表盘</div>
+				<div class="editcar-input">
+					<input placeholder="请输入全液晶仪表盘" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">HUD抬头数字显示</div>
+				<div class="editcar-input">
+					<input placeholder="请输入HUD抬头数字显示" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">内置行车记录仪</div>
+				<div class="editcar-input">
+					<input placeholder="请输入内置行车记录仪" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">11/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('11')">下一步</div>
+		</div>
+	</div>
+	<!--座椅配置-->
+	<div class="list-box">
+		<div class="cardic-tit">座椅配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">座椅材质</div>
+				<div class="editcar-input">
+					<input placeholder="请输入座椅材质" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">运动风格座椅</div>
+				<div class="editcar-input">
+					<input placeholder="请输入运动风格座椅" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">座椅高低调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入座椅高低调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">腰部支撑调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入腰部支撑调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">肩部支撑调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入肩部支撑调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">主驾驶座电动调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入主驾驶座电动调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">副驾驶座电动调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入副驾驶座电动调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排座椅电动调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排座椅电动调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">电动座椅记忆</div>
+				<div class="editcar-input">
+					<input placeholder="请输入电动座椅记忆" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前/后排座椅加热</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前/后排座椅加热" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排座椅放倒方式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排座椅放倒方式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前/后中央扶手</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前/后中央扶手" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排杯架</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排杯架" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">12/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('12')">下一步</div>
+		</div>
+	</div>
+	<!--多媒体配置-->
+	<div class="list-box">
+		<div class="cardic-tit">多媒体配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">GPS导航系统</div>
+				<div class="editcar-input">
+					<input placeholder="请输入GPS导航系统" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">道路救援呼叫</div>
+				<div class="editcar-input">
+					<input placeholder="请输入道路救援呼叫" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">中控台彩色大屏</div>
+				<div class="editcar-input">
+					<input placeholder="请输入中控台彩色大屏" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">蓝牙/车载电话</div>
+				<div class="editcar-input">
+					<input placeholder="请输入蓝牙/车载电话" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">外接音源接口</div>
+				<div class="editcar-input">
+					<input placeholder="请输入外接音源接口" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">CD</div>
+				<div class="editcar-input">
+					<input placeholder="请输入CD" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">DVD</div>
+				<div class="editcar-input">
+					<input placeholder="请输入DVD" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车载电视</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车载电视" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排液晶屏</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排液晶屏" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">扬声器品牌</div>
+				<div class="editcar-input">
+					<input placeholder="请输入扬声器品牌" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">扬声器数量</div>
+				<div class="editcar-input">
+					<input placeholder="请输入扬声器数量" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">手机互联/映射</div>
+				<div class="editcar-input">
+					<input placeholder="请输入手机互联/映射" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">13/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('13')">下一步</div>
+		</div>
+	</div>
+	<!--灯光配置-->
+	<div class="list-box">
+		<div class="cardic-tit">灯光配置</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">近光灯</div>
+				<div class="editcar-input">
+					<input placeholder="请输入近光灯" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">LED日间行车灯</div>
+				<div class="editcar-input">
+					<input placeholder="请输入LED日间行车灯" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">自适应远近光</div>
+				<div class="editcar-input">
+					<input placeholder="请输入自适应远近光" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">转向辅助灯</div>
+				<div class="editcar-input">
+					<input placeholder="请输入转向辅助灯" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">转向头灯</div>
+				<div class="editcar-input">
+					<input placeholder="请输入转向头灯" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前雾灯</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前雾灯" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">大灯高度可调</div>
+				<div class="editcar-input">
+					<input placeholder="请输入大灯高度可调" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">大灯清洗装置</div>
+				<div class="editcar-input">
+					<input placeholder="请输入大灯清洗装置" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车内氛围灯</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车内氛围灯" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">14/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('14')">下一步</div>
+		</div>
+	</div>
+	<!--玻璃/后视镜-->
+	<div class="list-box">
+		<div class="cardic-tit">玻璃/后视镜</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">前/后电动车窗</div>
+				<div class="editcar-input">
+					<input placeholder="请输入前/后电动车窗" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车窗一键升降</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车窗一键升降" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车窗防夹手功能</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车窗防夹手功能" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后视镜电动调节</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后视镜电动调节" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后视镜加热</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后视镜加热" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">内/外后视镜自动防眩目</div>
+				<div class="editcar-input">
+					<input placeholder="请输入内/外后视镜自动防眩目" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后视镜电动折叠</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后视镜电动折叠" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">遮阳板化妆镜</div>
+				<div class="editcar-input">
+					<input placeholder="请输入遮阳板化妆镜" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后雨刷</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后雨刷" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">感应雨刷</div>
+				<div class="editcar-input">
+					<input placeholder="请输入感应雨刷" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后视镜记忆</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后视镜记忆" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">防紫外线/隔热玻璃</div>
+				<div class="editcar-input">
+					<input placeholder="请输入防紫外线/隔热玻璃" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排侧隐私玻璃</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排侧隐私玻璃" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后风挡遮阳帘</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后风挡遮阳帘" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">15/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('15')">下一步</div>
+		</div>
+	</div>
+	<!--空调／冰箱-->
+	<div class="list-box">
+		<div class="cardic-tit">空调/冰箱</div>
+		<ul class="editcar-parbox flex-box">
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">空调控制方式</div>
+				<div class="editcar-input">
+					<input placeholder="请输入空调控制方式" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后排独立空调</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后排独立空调" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">后座出风口</div>
+				<div class="editcar-input">
+					<input placeholder="请输入后座出风口" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">温度分区控制</div>
+				<div class="editcar-input">
+					<input placeholder="请输入温度分区控制" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车内空气调节/花粉过滤</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车内空气调节/花粉过滤" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车载空气净化器</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车载空气净化器" />
+				</div>
+			</li>
+			<li class="editcar-par flex-box">
+				<div class="editcar-desc">车载冰箱</div>
+				<div class="editcar-input">
+					<input placeholder="请输入车载冰箱" />
+				</div>
+			</li>
+		</ul>
+
+		<div class="page-box ">16/16</div>
+		<div class="carist-btn-box flex-box-center" style="margin-top: 10px;">
+			<div class="btn" onclick="Savecar('16')">确定</div>
+		</div>
+	</div>
+
+	<div class="alert-brand" id="Alertbrand">
+		<div class="shaw"></div>
+		<div class="content">
+			<div class="newcarpar-box">
+				<div class="newcarpar-navbox">
+					<ul class="navlist flex-box" id="Navlistbox">
+						<li class="active" onclick="Changenav($(this),'')">全部</li>
+						<li>#</li>
+					</ul>
+					<div class="carbrand-box">
+						<ul class="brand flex-box" id="Brandbox">
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="btn-box flex-box-center">
+				<div class="btn-1" onclick="Closebrandalert()">关闭</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var ajaxdata = '';
+	var postdata = {
+		vehicleModelVo: {
+			brandId: '',
+			brandName: '',
+			model: '',
+			fullName:'',
+			listUrls: [],
+			imgUrls: []
+		}
+	}
+	var postbasic = {
+		basic: {
+			vendor: '',
+			rank: '',
+			energytype: '',
+			yeartype: '',
+			ministrymileage: '',
+			engine: '',
+			gearbox: '',
+			maxspeed: '',
+			officialaccelerationtime100: '',
+			comfuelconsumption: '',
+			warrantypolicy: '',
+			color: '',
+			interiorcolor: '',
+			modelId: '',
+		}
+	}
+	var postbody = {
+		body: {
+			len: '',
+			width: '',
+			height: '',
+			wheelbase: '',
+			fronttrack: '',
+			reartrack: '',
+			doornum: '',
+			seatnum: '',
+			bodystructure: '',
+			fueltankcapacity: '',
+			luggagevolume: '',
+			weight: '',
+			modelId: '',
+		}
+	}
+	var postengine = {
+		engine: {
+			model: '',
+			displacement: '',
+			intakeform: '',
+			cylinderarrangetype: '',
+			cylindernum: '',
+			singlecylindernum: '',
+			compressionratio: '',
+			borediameter: '',
+			maxhorsepower: '',
+			maxpower: '',
+			maxpowerspeed: '',
+			maxtorque: '',
+			maxtorquespeed: '',
+			enginespecifictechnology: '',
+			fueltype: '',
+			fuelgrade: '',
+			fuelmethod: '',
+			cylinderheadmaterial: '',
+			cylinderbodymaterial: '',
+			environmentalstandards: '',
+			modelId: '',
+		}
+	}
+	var postgearbox = {
+		gearbox: {
+			stallnumber: '',
+			gearboxtype: '',
+			abbreviation: '',
+			modelId: '',
+		}
+	}
+	var postchassisbrake = {
+		chassisbrake: {
+			drivemode: '',
+			fourdriveform: '',
+			centerdifferentiallock: '',
+			frontsuspensiontype: '',
+			rearsuspensiontype: '',
+			eps: '',
+			modelId: '',
+		}
+	}
+	var postwheel = {
+		wheel: {
+			frontbraketype: '',
+			rearbraketype: '',
+			parkingbraketype: '',
+			fronttiresize: '',
+			reartiresize: '',
+			sparetiretype: '',
+			modelId: '',
+		}
+	}
+	var postsafe = {
+		safe: {
+			airbagdrivingposition: '',
+			airbagfrontpassenger: '',
+			airbagrearside: '',
+			airbagfronthead: '',
+			airbagrearhead: '',
+			airbagknee: '',
+			tirepressuremonitoring: '',
+			zeropressurecontinued: '',
+			safetybeltprompt: '',
+			childseatfixdevice: '',
+			abs: '',
+			ebd: '',
+			brakeassist: '',
+			tractioncontrol: '',
+			esp: '',
+			parallelauxiliary: '',
+			ldws: '',
+			activebraking: '',
+			nightvisionsystem: '',
+			fatiguedrivingtips: '',
+			modelId: '',
+		}
+	}
+	var postdrivingauxiliary = {
+		drivingauxiliary: {
+			frontparkingradar: '',
+			reverseimage: '',
+			panoramiccamera: '',
+			cruisecontrol: '',
+			adaptivecruise: '',
+			automaticparkingintoplace: '',
+			enginestartstoptechnology: '',
+			hillstartassist: '',
+			autoparking: '',
+			hilldescent: '',
+			adjustablesuspension: '',
+			airsuspension: '',
+			variablesteeringratio: '',
+			integralactivesteering: '',
+			frontaxlelimitedslipdifferentiallock: '',
+			rearaxlelimitedslipdifferentiallock: '',
+			centraldifferentiallockingfunction: '',
+			modelId: '',
+		}
+	}
+	var postexternalconfig = {
+		externalconfig: {
+			skylightopeningmode: '',
+			skylightstype: '',
+			sportpackage: '',
+			hubmaterial: '',
+			electricallyoperatedsuctiondoor: '',
+			sideslip: '',
+			electricreservecompartment: '',
+			inductionluggage: '',
+			roofluggagerack: '',
+			engineantitheft: '',
+			centrallocking: '',
+			remotekey: '',
+			keylessstart: '',
+			keylessentry: '',
+			remoteboot: '',
+			modelId: '',
+		}
+	}
+	var postinternalconfig = {
+		internalconfig: {
+			steeringwheelmaterial: '',
+			steeringwheeladjustment: '',
+			steeringwheeladjustmentmode: '',
+			steeringwheelmultifunction: '',
+			shiftpaddles: '',
+			steeringwheelheating: '',
+			steeringwheelmemory: '',
+			drivingcomputerdisplayscreen: '',
+			computerscreen: '',
+			huddisplay: '',
+			builtinvehicledatarecorder: '',
+			modelId: '',
+		}
+	}
+	var postseat = {
+		seat: {
+			seatmaterial: '',
+			sportsstyleseat: '',
+			seatheightadjustment: '',
+			driverseatlumbarsupportadjustment: '',
+			driverseatshouldersupportadjustment: '',
+			driverseatadjustmentmode: '',
+			auxiliaryseatadjustmentmode: '',
+			electricadjustmentforrearseats: '',
+			electricseatmemory: '',
+			frontrearseaheating: '',
+			rearseatreclineproportion: '',
+			frontseatcenterarmrest: '',
+			rearcupholder: '',
+			modelId: '',
+		}
+	}
+	var postentcom = {
+		entcom: {
+			gps: '',
+			roadrescuecall: '',
+			consolelcdscreen: '',
+			bluetooth: '',
+			externalaudiointerface: '',
+			cd: '',
+			dvd: '',
+			cartv: '',
+			rearlcdscreen: '',
+			audiobrand: '',
+			speakernum: '',
+			mobileinternetmapping: '',
+			modelId: '',
+		}
+	}
+	var postlight = {
+		light: {
+			headlighttype: '',
+			daytimerunninglight: '',
+			adaptivefarandnearlight: '',
+			lightsteeringassist: '',
+			rearmirrorwithturnlamp: '',
+			frontfoglight: '',
+			headlampheightadjustable: '',
+			headlightautomaticclean: '',
+			readinglight: '',
+			modelId: '',
+		}
+	}
+	var postdoormirror = {
+		doormirror: {
+			electricwindow: '',
+			windowkeylift: '',
+			antipinchwindow: '',
+			externalmirroradjustment: '',
+			externalmirrorheating: '',
+			rearviewmirrorantiglare: '',
+			externalmirrorfolding: '',
+			sunvisormirror: '',
+			rearwiper: '',
+			sensingwiper: '',
+			rearviewmirrormemory: '',
+			uvinterceptingglass: '',
+			privacyglass: '',
+			rearsidesunshade: '',
+			modelId: '',
+		}
+	}
+	var postaircondrefrigerator = {
+		aircondrefrigerator: {
+			airconditioningcontrolmode: '',
+			rearairconditioning: '',
+			reardischargeoutlet: '',
+			tempzonecontrol: '',
+			airconditioning: '',
+			airpurifyingdevice: '',
+			carrefrigerator: '',
+			modelId: '',
+		}
+	}
+	$(function() {
+		$("#Parinfobox").find(".list-box").eq(0).show();
+	})
+	//打开品牌弹窗
+	function Choosebrand() {
+		$("#Alertbrand").show();
+		$.ajax({
+			type: "get",
+			url: "/cargogo/caristration/changebrandletter",
+			async: true,
+			success: function(res) {
+				var navdata = '';
+				var branddata = '';
+				for(var i = 0; i < res.length; i++) {
+					navdata += '<li onclick="Changenav($(this),\'' + res[i].initial + '\')">' + res[i].initial + '</li>'
+					for(var j = 0; j < res[i].list.length; j++) {
+						branddata += '<li data-carid = "' + res[i].list[j].id + '" onclick="Changebrand($(this))">' + res[i].list[j].brandNmae + '</li>';
+					}
+				}
+				$("#Brandbox").html(branddata);
+				$("#Navlistbox").append(navdata);
+			}
+		});
+	}
+	//选择品牌分类
+	function Changenav(obj, letter) {
+		console.log("32")
+		obj.addClass("active").siblings("li").removeClass("active");
+		$.ajax({
+			type: "get",
+			url: "/cargogo/caristration/changebrandletter",
+			async: true,
+			success: function(res) {
+				var isletter = '';
+				var branddata = '';
+				for(var i = 0; i < res.length; i++) {
+					if(res[i].initial == letter) {
+						isletter = i;
+						break;
+					}
+				}
+				if(isletter === '') {
+					for(var i = 0; i < res.length; i++) {
+						for(var j = 0; j < res[i].list.length; j++) {
+							branddata += '<li data-carid = "' + res[i].list[j].id + '" onclick="Changebrand($(this))">' + res[i].list[j].brandNmae + '</li>';
+						}
+					}
+				} else {
+					for(var j = 0; j < res[isletter].list.length; j++) {
+						branddata += '<li data-carid = "' + res[isletter].list[j].id + '" onclick="Changebrand($(this))">' + res[isletter].list[j].brandNmae + '</li>';
+					}
+				}
+				$("#Brandbox").html(branddata);
+			}
+		});
+	}
+	//选择品牌
+	function Changebrand(obj) {
+		postdata.vehicleModelVo.brandName = obj.text();
+		postdata.vehicleModelVo.brandId = obj.attr("data-carid");
+		$("#Brand").text(obj.text());
+		$("#Alertbrand").hide();
+	}
+	//关闭品牌弹窗
+	function Closebrandalert() {
+		$("#Alertbrand").hide();
+	}
+	jQuery.DuoImgsYulan = function(file, id, num) {
+
+		for(var i = 0; i < Number(num); i++) {
+			console.log(i);
+			if(!/image\/\w+/.test(file[i].type)) {
+				alert("请选择图片文件");
+				return false;
+			}
+			if(file[i].size > 2048 * 1024 * 10) {
+				alert("图片不能大于2MB");
+				continue;
+			}
+			var img;
+			var reader = new FileReader();
+			reader.onloadstart = function(e) {
+				console.log("开始读取....");
+			}
+			reader.onprogress = function(e) {
+				console.log("正在读取中....");
+			}
+			reader.onabort = function(e) {
+				console.log("中断读取....");
+			}
+			reader.onerror = function(e) {
+				console.log("读取异常....");
+			}
+			reader.onload = function(e) {
+				console.log("成功读取....");
+				var div = document.createElement("div"); //外层 div
+				div.setAttribute("style", "position:relative;width:inherit;height:inherit;float:left;z-index:2;width:100px;margin-left:8px;margin-right:8px;");
+				var del = document.createElement("div"); //删除按钮div
+				del.setAttribute("style", "position: absolute; bottom: 4px; right: 0px; z-index: 99; width: 20px; height:20px;border-radius:50%;")
+				var delicon = document.createElement("img");
+				delicon.setAttribute("src", "/static/images/icon_deletet.png");
+				delicon.setAttribute("title", "删除");
+				delicon.setAttribute("style", "cursor:pointer;width: 20px; height:20px");
+				del.onclick = function() {
+					this.parentNode.parentNode.removeChild(this.parentElement);
+					ClearfirtsImg();
+				};
+				del.appendChild(delicon);
+				div.appendChild(del);
+				var imgs = document.createElement("img"); //上传的图片
+				imgs.setAttribute("name", "loadimgs");
+				imgs.setAttribute("src", e.target.result);
+				imgs.setAttribute("width", 120);
+				console.log(document.getElementById(id).childNodes.length, Number(num))
+				if(document.getElementById(id).childNodes.length >= Number(num)) {
+					document.getElementById(id).removeChild(document.getElementById(id).firstChild);
+				}
+				div.appendChild(imgs)
+				document.getElementById(id).appendChild(div);
+			}
+			reader.readAsDataURL(file[i]);
+		}
+	}
+
+	function FirstImg(inputid, imgid, num) {
+		$.DuoImgsYulan(document.getElementById(inputid).files, imgid, num);
+	}
+
+	function ajaxFileUpload(num, FirstfileImg, imgUrl) {
+		$.ajaxFileUpload({
+			url: "/cargogo/cardictionaries/uploadimg?num=" + num, //用于文件上传的服务器端请求地址
+			type: 'post',
+			secureuri: false, //是否需要安全协议，一般设置为false
+			fileElementId: FirstfileImg, //文件上传域的ID
+			dataType: 'text', //返回值类型 一般设置为json
+			success: function(data) //服务器成功响应处理函数
+			{
+
+				data = $.parseJSON(data.replace(/<.*?>/ig, ""));
+				console.log(data);
+				if(data.queststatus == 0) {
+					layer.msg("上传成功")
+					if(data.num == "1") {
+						postdata.vehicleModelVo.listUrls = data.namedata
+					}
+					if(data.num == "2") {
+						postdata.vehicleModelVo.imgUrls = data.namedata
+					}
+				} else if(data.queststatus == 403) {
+					layer.msg("该账号无上传权限")
+				} else {
+					layer.msg("上传失败，请刷新后重试")
+				}
+			},
+			error: function(data) //服务器响应失败处理函数
+			{
+				layer.msg(data);
+			}
+		})
+		return false;
+	}
+
+	function ClearfirtsImg() {
+		var file = $("#FirstfileImg")
+		file.after(file.clone().val(""));
+		file.remove();
+	}
+
+	function Savecar(num) {
+		var Domdata = $("#Parinfobox").find(".list-box").eq(num - 1);
+		switch(num) {
+			case "1":
+				postdata.vehicleModelVo.model = Domdata.find("input").eq(0).val();
+				postdata.vehicleModelVo.fullName =Domdata.find("input").eq(1).val();
+				postdata.vehicleModelVo.imgUrls=postdata.vehicleModelVo.imgUrls.filter(function(element,index,self){
+				     return self.indexOf(element) === index;
+				 });
+				ajaxdata = postdata;
+				break;
+			case "2":
+				postbasic.basic.vendor = Domdata.find("input").eq(0).val();
+				postbasic.basic.rank = Domdata.find("input").eq(1).val();
+				postbasic.basic.energytype = Domdata.find("input").eq(2).val();
+				postbasic.basic.yeartype = Domdata.find("input").eq(3).val();
+				postbasic.basic.ministrymileage = Domdata.find("input").eq(4).val();
+				postbasic.basic.engine = Domdata.find("input").eq(5).val();
+				postbasic.basic.gearbox = Domdata.find("input").eq(6).val();
+				postbasic.basic.maxspeed = Domdata.find("input").eq(7).val();
+				postbasic.basic.officialaccelerationtime100 = Domdata.find("input").eq(8).val();
+				postbasic.basic.comfuelconsumption = Domdata.find("input").eq(9).val();
+				postbasic.basic.warrantypolicy = Domdata.find("input").eq(10).val();
+				postbasic.basic.color = Domdata.find("input").eq(11).val();
+				postbasic.basic.interiorcolor = Domdata.find("input").eq(12).val();
+				ajaxdata = postbasic;
+				break;
+			case "3":
+				postbody.body.len = Domdata.find("input").eq(0).val();
+				postbody.body.width = Domdata.find("input").eq(1).val();
+				postbody.body.height = Domdata.find("input").eq(2).val();
+				postbody.body.wheelbase = Domdata.find("input").eq(3).val();
+				postbody.body.fronttrack = Domdata.find("input").eq(4).val();
+				postbody.body.reartrack = Domdata.find("input").eq(5).val();
+				postbody.body.mingroundclearance = Domdata.find("input").eq(6).val();
+				postbody.body.doornum = Domdata.find("input").eq(7).val();
+				postbody.body.seatnum = Domdata.find("input").eq(8).val();
+				postbody.body.bodystructure = Domdata.find("input").eq(9).val();
+				postbody.body.fueltankcapacity = Domdata.find("input").eq(10).val();
+				postbody.body.luggagevolume = Domdata.find("input").eq(11).val();
+				postbody.body.weight = Domdata.find("input").eq(12).val();
+				ajaxdata = postbody;
+				break;
+			case "4":
+				postengine.engine.model = Domdata.find("input").eq(0).val();
+				postengine.engine.displacement = Domdata.find("input").eq(1).val();
+				postengine.engine.intakeform = Domdata.find("input").eq(2).val();
+				postengine.engine.cylinderarrangetype = Domdata.find("input").eq(3).val();
+				postengine.engine.cylindernum = Domdata.find("input").eq(4).val();
+				postengine.engine.singlecylindernum = Domdata.find("input").eq(5).val();
+				postengine.engine.compressionratio = Domdata.find("input").eq(6).val();
+				postengine.engine.borediameter = Domdata.find("input").eq(7).val();
+				postengine.engine.maxhorsepower = Domdata.find("input").eq(8).val();
+				postengine.engine.maxpower = Domdata.find("input").eq(9).val();
+				postengine.engine.maxpowerspeed = Domdata.find("input").eq(10).val();
+				postengine.engine.maxtorque = Domdata.find("input").eq(11).val();
+				postengine.engine.maxtorquespeed = Domdata.find("input").eq(12).val();
+				postengine.engine.enginespecifictechnology = Domdata.find("input").eq(13).val();
+				postengine.engine.fueltype = Domdata.find("input").eq(14).val();
+				postengine.engine.fuelgrade = Domdata.find("input").eq(15).val();
+				postengine.engine.fuelmethod = Domdata.find("input").eq(16).val();
+				postengine.engine.cylinderheadmaterial = Domdata.find("input").eq(17).val();
+				postengine.engine.cylinderbodymaterial = Domdata.find("input").eq(18).val();
+				postengine.engine.environmentalstandards = Domdata.find("input").eq(19).val();
+				ajaxdata = postengine;
+				break;
+			case "5":
+				postgearbox.gearbox.stallnumber = Domdata.find("input").eq(0).val();
+				postgearbox.gearbox.gearboxtype = Domdata.find("input").eq(1).val();
+				postgearbox.gearbox.abbreviation = Domdata.find("input").eq(2).val();
+				ajaxdata = postgearbox;
+				break;
+			case "6":
+				postchassisbrake.chassisbrake.drivemode = Domdata.find("input").eq(0).val();
+				postchassisbrake.chassisbrake.fourdriveform = Domdata.find("input").eq(1).val();
+				postchassisbrake.chassisbrake.centerdifferentiallock = Domdata.find("input").eq(2).val();
+				postchassisbrake.chassisbrake.frontsuspensiontype = Domdata.find("input").eq(3).val();
+				postchassisbrake.chassisbrake.rearsuspensiontype = Domdata.find("input").eq(4).val();
+				postchassisbrake.chassisbrake.eps = Domdata.find("input").eq(5).val();
+				ajaxdata = postchassisbrake;
+				break;
+			case "7":
+				postwheel.wheel.frontbraketype = Domdata.find("input").eq(0).val();
+				postwheel.wheel.rearbraketype = Domdata.find("input").eq(1).val();
+				postwheel.wheel.parkingbraketype = Domdata.find("input").eq(2).val();
+				postwheel.wheel.fronttiresize = Domdata.find("input").eq(3).val();
+				postwheel.wheel.reartiresize = Domdata.find("input").eq(4).val();
+				postwheel.wheel.sparetiretype = Domdata.find("input").eq(5).val();
+				ajaxdata = postwheel;
+				break;
+			case "8":
+				postsafe.safe.airbagdrivingposition = Domdata.find("input").eq(0).val();
+				postsafe.safe.airbagfrontpassenger = Domdata.find("input").eq(1).val();
+				postsafe.safe.airbagrearside = Domdata.find("input").eq(2).val();
+				postsafe.safe.airbagfronthead = Domdata.find("input").eq(3).val();
+				postsafe.safe.airbagrearhead = Domdata.find("input").eq(4).val();
+				postsafe.safe.airbagknee = Domdata.find("input").eq(5).val();
+				postsafe.safe.tirepressuremonitoring = Domdata.find("input").eq(6).val();
+				postsafe.safe.zeropressurecontinued = Domdata.find("input").eq(7).val();
+				postsafe.safe.safetybeltprompt = Domdata.find("input").eq(8).val();
+				postsafe.safe.childseatfixdevice = Domdata.find("input").eq(9).val();
+				postsafe.safe.abs = Domdata.find("input").eq(10).val();
+				postsafe.safe.ebd = Domdata.find("input").eq(11).val();
+				postsafe.safe.brakeassist = Domdata.find("input").eq(12).val();
+				postsafe.safe.tractioncontrol = Domdata.find("input").eq(13).val();
+				postsafe.safe.esp = Domdata.find("input").eq(14).val();
+				postsafe.safe.parallelauxiliary = Domdata.find("input").eq(15).val();
+				postsafe.safe.ldws = Domdata.find("input").eq(16).val();
+				postsafe.safe.activebraking = Domdata.find("input").eq(17).val();
+				postsafe.safe.nightvisionsystem = Domdata.find("input").eq(18).val();
+				postsafe.safe.fatiguedrivingtips = Domdata.find("input").eq(19).val();
+				ajaxdata = postsafe;
+				break;
+			case "9":
+				postdrivingauxiliary.drivingauxiliary.frontparkingradar = Domdata.find("input").eq(0).val();
+				postdrivingauxiliary.drivingauxiliary.reverseimage = Domdata.find("input").eq(1).val();
+				postdrivingauxiliary.drivingauxiliary.panoramiccamera = Domdata.find("input").eq(2).val();
+				postdrivingauxiliary.drivingauxiliary.cruisecontrol = Domdata.find("input").eq(3).val();
+				postdrivingauxiliary.drivingauxiliary.adaptivecruise = Domdata.find("input").eq(4).val();
+				postdrivingauxiliary.drivingauxiliary.automaticparkingintoplace = Domdata.find("input").eq(5).val();
+				postdrivingauxiliary.drivingauxiliary.enginestartstoptechnology = Domdata.find("input").eq(6).val();
+				postdrivingauxiliary.drivingauxiliary.hillstartassist = Domdata.find("input").eq(7).val();
+				postdrivingauxiliary.drivingauxiliary.autoparking = Domdata.find("input").eq(8).val();
+				postdrivingauxiliary.drivingauxiliary.hilldescent = Domdata.find("input").eq(9).val();
+				postdrivingauxiliary.drivingauxiliary.adjustablesuspension = Domdata.find("input").eq(10).val();
+				postdrivingauxiliary.drivingauxiliary.airsuspension = Domdata.find("input").eq(11).val();
+				postdrivingauxiliary.drivingauxiliary.variablesteeringratio = Domdata.find("input").eq(12).val();
+				postdrivingauxiliary.drivingauxiliary.integralactivesteering = Domdata.find("input").eq(13).val();
+				postdrivingauxiliary.drivingauxiliary.frontaxlelimitedslipdifferentiallock = Domdata.find("input").eq(14).val();
+				postdrivingauxiliary.drivingauxiliary.rearaxlelimitedslipdifferentiallock = Domdata.find("input").eq(15).val();
+				postdrivingauxiliary.drivingauxiliary.centraldifferentiallockingfunction = Domdata.find("input").eq(16).val();
+				ajaxdata = postdrivingauxiliary;
+				break;
+			case "10":
+				postexternalconfig.externalconfig.skylightopeningmode = Domdata.find("input").eq(0).val();
+				postexternalconfig.externalconfig.skylightstype = Domdata.find("input").eq(1).val();
+				postexternalconfig.externalconfig.sportpackage = Domdata.find("input").eq(2).val();
+				postexternalconfig.externalconfig.hubmaterial = Domdata.find("input").eq(3).val();
+				postexternalconfig.externalconfig.electricallyoperatedsuctiondoor = Domdata.find("input").eq(4).val();
+				postexternalconfig.externalconfig.sideslip = Domdata.find("input").eq(5).val();
+				postexternalconfig.externalconfig.electricreservecompartment = Domdata.find("input").eq(6).val();
+				postexternalconfig.externalconfig.inductionluggage = Domdata.find("input").eq(7).val();
+				postexternalconfig.externalconfig.roofluggagerack = Domdata.find("input").eq(8).val();
+				postexternalconfig.externalconfig.engineantitheft = Domdata.find("input").eq(9).val();
+				postexternalconfig.externalconfig.centrallocking = Domdata.find("input").eq(10).val();
+				postexternalconfig.externalconfig.remotekey = Domdata.find("input").eq(11).val();
+				postexternalconfig.externalconfig.keylessstart = Domdata.find("input").eq(12).val();
+				postexternalconfig.externalconfig.keylessentry = Domdata.find("input").eq(13).val();
+				postexternalconfig.externalconfig.remoteboot = Domdata.find("input").eq(14).val();
+				ajaxdata = postexternalconfig;
+				break;
+			case "11":
+				postinternalconfig.internalconfig.steeringwheelmaterial = Domdata.find("input").eq(0).val();
+				postinternalconfig.internalconfig.steeringwheeladjustment = Domdata.find("input").eq(1).val();
+				postinternalconfig.internalconfig.steeringwheeladjustmentmode = Domdata.find("input").eq(2).val();
+				postinternalconfig.internalconfig.steeringwheelmultifunction = Domdata.find("input").eq(3).val();
+				postinternalconfig.internalconfig.shiftpaddles = Domdata.find("input").eq(4).val();
+				postinternalconfig.internalconfig.steeringwheelheating = Domdata.find("input").eq(5).val();
+				postinternalconfig.internalconfig.steeringwheelmemory = Domdata.find("input").eq(6).val();
+				postinternalconfig.internalconfig.drivingcomputerdisplayscreen = Domdata.find("input").eq(7).val();
+				postinternalconfig.internalconfig.computerscreen = Domdata.find("input").eq(8).val();
+				postinternalconfig.internalconfig.huddisplay = Domdata.find("input").eq(9).val();
+				postinternalconfig.internalconfig.builtinvehicledatarecorder = Domdata.find("input").eq(10).val();
+				ajaxdata = postinternalconfig;
+				break;
+			case "12":
+				postseat.seat.seatmaterial = Domdata.find("input").eq(0).val();
+				postseat.seat.sportsstyleseat = Domdata.find("input").eq(1).val();
+				postseat.seat.seatheightadjustment = Domdata.find("input").eq(2).val();
+				postseat.seat.driverseatlumbarsupportadjustment = Domdata.find("input").eq(3).val();
+				postseat.seat.driverseatshouldersupportadjustment = Domdata.find("input").eq(4).val();
+				postseat.seat.driverseatadjustmentmode = Domdata.find("input").eq(5).val();
+				postseat.seat.auxiliaryseatadjustmentmode = Domdata.find("input").eq(6).val();
+				postseat.seat.electricadjustmentforrearseats = Domdata.find("input").eq(7).val();
+				postseat.seat.electricseatmemory = Domdata.find("input").eq(8).val();
+				postseat.seat.frontrearseaheating = Domdata.find("input").eq(9).val();
+				postseat.seat.rearseatreclineproportion = Domdata.find("input").eq(10).val();
+				postseat.seat.frontseatcenterarmrest = Domdata.find("input").eq(11).val();
+				postseat.seat.rearcupholder = Domdata.find("input").eq(12).val();
+				ajaxdata = postseat;
+				break;
+			case "13":
+				postentcom.entcom.gps = Domdata.find("input").eq(0).val();
+				postentcom.entcom.roadrescuecall = Domdata.find("input").eq(1).val();
+				postentcom.entcom.consolelcdscreen = Domdata.find("input").eq(2).val();
+				postentcom.entcom.bluetooth = Domdata.find("input").eq(3).val();
+				postentcom.entcom.externalaudiointerface = Domdata.find("input").eq(4).val();
+				postentcom.entcom.cd = Domdata.find("input").eq(5).val();
+				postentcom.entcom.dvd = Domdata.find("input").eq(6).val();
+				postentcom.entcom.cartv = Domdata.find("input").eq(7).val();
+				postentcom.entcom.rearlcdscreen = Domdata.find("input").eq(8).val();
+				postentcom.entcom.audiobrand = Domdata.find("input").eq(9).val();
+				postentcom.entcom.speakernum = Domdata.find("input").eq(10).val();
+				postentcom.entcom.mobileinternetmapping = Domdata.find("input").eq(11).val();
+				ajaxdata = postentcom;
+				break;
+			case "14":
+				postlight.light.headlighttype = Domdata.find("input").eq(0).val();
+				postlight.light.daytimerunninglight = Domdata.find("input").eq(1).val();
+				postlight.light.adaptivefarandnearlight = Domdata.find("input").eq(2).val();
+				postlight.light.lightsteeringassist = Domdata.find("input").eq(3).val();
+				postlight.light.rearmirrorwithturnlamp = Domdata.find("input").eq(4).val();
+				postlight.light.frontfoglight = Domdata.find("input").eq(5).val();
+				postlight.light.headlampheightadjustable = Domdata.find("input").eq(6).val();
+				postlight.light.headlightautomaticclean = Domdata.find("input").eq(7).val();
+				postlight.light.readinglight = Domdata.find("input").eq(8).val();
+				ajaxdata = postlight;
+				break;
+			case "15":
+				postdoormirror.doormirror.electricwindow = Domdata.find("input").eq(0).val();
+				postdoormirror.doormirror.windowkeylift = Domdata.find("input").eq(1).val();
+				postdoormirror.doormirror.antipinchwindow = Domdata.find("input").eq(2).val();
+				postdoormirror.doormirror.externalmirroradjustment = Domdata.find("input").eq(3).val();
+				postdoormirror.doormirror.externalmirrorheating = Domdata.find("input").eq(4).val();
+				postdoormirror.doormirror.rearviewmirrorantiglare = Domdata.find("input").eq(5).val();
+				postdoormirror.doormirror.externalmirrorfolding = Domdata.find("input").eq(6).val();
+				postdoormirror.doormirror.sunvisormirror = Domdata.find("input").eq(7).val();
+				postdoormirror.doormirror.rearwiper = Domdata.find("input").eq(8).val();
+				postdoormirror.doormirror.sensingwiper = Domdata.find("input").eq(9).val();
+				postdoormirror.doormirror.rearviewmirrormemory = Domdata.find("input").eq(10).val();
+				postdoormirror.doormirror.uvinterceptingglass = Domdata.find("input").eq(11).val();
+				postdoormirror.doormirror.privacyglass = Domdata.find("input").eq(12).val();
+				postdoormirror.doormirror.rearsidesunshade = Domdata.find("input").eq(13).val();
+				ajaxdata = postdoormirror;
+				break;
+			case "16":
+				postaircondrefrigerator.aircondrefrigerator.airconditioningcontrolmode = Domdata.find("input").eq(0).val();
+				postaircondrefrigerator.aircondrefrigerator.rearairconditioning = Domdata.find("input").eq(1).val();
+				postaircondrefrigerator.aircondrefrigerator.reardischargeoutlet = Domdata.find("input").eq(2).val();
+				postaircondrefrigerator.aircondrefrigerator.tempzonecontrol = Domdata.find("input").eq(3).val();
+				postaircondrefrigerator.aircondrefrigerator.airconditioning = Domdata.find("input").eq(4).val();
+				postaircondrefrigerator.aircondrefrigerator.airpurifyingdevice = Domdata.find("input").eq(5).val();
+				postaircondrefrigerator.aircondrefrigerator.carrefrigerator = Domdata.find("input").eq(6).val();
+				ajaxdata = postaircondrefrigerator;
+				break;
+			default:
+				break;
+		}
+		console.log("23232", postdata, ajaxdata, num);
+		if(num == 1) {
+			if(postdata.vehicleModelVo.brandName != '') {
+				$.ajax({
+					type: "post",
+					url: "/cargogo/cardictionaries/adddiccar",
+					contentType: 'application/json;charset=utf-8',
+					async: true,
+					dataType: "json",
+					data: JSON.stringify(postdata),
+					async: true,
+					success: function(res) {
+						console.log("res", res);
+						if(res.status == 0) {
+							postbasic.basic.modelId = res.body.data;
+							postbody.body.modelId = res.body.data;
+							postchassisbrake.chassisbrake.modelId = res.body.data;
+							postdoormirror.doormirror.modelId = res.body.data;
+							postdrivingauxiliary.drivingauxiliary.modelId = res.body.data;
+							postengine.engine.modelId = res.body.data;
+							postentcom.entcom.modelId = res.body.data;
+							postexternalconfig.externalconfig.modelId = res.body.data;
+							postgearbox.gearbox.modelId = res.body.data;
+							postinternalconfig.internalconfig.modelId = res.body.data;
+							postlight.light.modelId = res.body.data;
+							postsafe.safe.modelId = res.body.data;
+							postaircondrefrigerator.aircondrefrigerator.modelId = res.body.data;
+							postseat.seat.modelId = res.body.data;
+							postwheel.wheel.modelId = res.body.data;
+							$("#Parinfobox").find(".list-box").eq(num).show().siblings(".list-box").hide()
+						} else {
+							layer.msg(res.msg)
+						}
+					}
+				});
+			} else {
+				layer.msg("品牌不能为空")
+			}
+		} else if(num == 16) {
+			$.ajax({
+				type: "post",
+				url: "/cargogo/cardictionaries/adddiccar",
+				contentType: 'application/json;charset=utf-8',
+				async: true,
+				dataType: "json",
+				data: JSON.stringify(ajaxdata),
+				async: true,
+				success: function(res) {
+					console.log("res", res);
+					if(res.status == 0) {
+						layer.msg("新增车辆成功");
+						setTimeout(function() {
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.layer.close(index);
+							window.parent.location.reload()
+						}, 1000)
+					} else {
+						layer.msg(res.msg)
+					}
+				}
+			});
+		} else {
+			Ajaxquest(num, ajaxdata);
+		}
+
+	}
+
+	function Ajaxquest(num, data) {
+		$.ajax({
+			type: "post",
+			url: "/cargogo/cardictionaries/adddiccar",
+			contentType: 'application/json;charset=utf-8',
+			async: true,
+			dataType: "json",
+			data: JSON.stringify(data),
+			async: true,
+			success: function(res) {
+				console.log("res", res);
+				if(res.status == 0) {
+					$("#Parinfobox").find(".list-box").eq(num).show().siblings(".list-box").hide()
+				} else {
+					layer.msg(res.msg)
+				}
+			}
+		});
+	}
+</script>
+{% endblock %} {% block form_submit %} {% endblock %}
